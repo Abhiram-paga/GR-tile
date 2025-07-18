@@ -1,0 +1,7 @@
+{
+  "name": "supply-chain",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
