@@ -1,0 +1,10 @@
+@use "../../../../theme/abstracts/variables" as *;
+@use "../../../../theme/abstracts/mixins" as *;
+
+.login-button {
+  @include styled-button($main-color, #ffffff);
+  margin-bottom: 10px;
+}
+.demo-button {
+  @include styled-button(#ffffff, $main-color);
+}

@@ -1,0 +1,6 @@
+@use '../../../theme/abstracts/variables.scss' as *;
+@use '../../../theme/abstracts/mixins.scss' as *;
+
+ion-icon{
+    margin-right: $margin-right;
+}

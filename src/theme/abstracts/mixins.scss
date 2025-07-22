@@ -1,0 +1,12 @@
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin styled-button($bg-color, $text-color: white) {
+  --background: #{$bg-color};
+  --color: #{$text-color};
+  background: #{$bg-color}; 
+  color: #{$text-color};  
+}
