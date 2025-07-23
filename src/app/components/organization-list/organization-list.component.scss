@@ -1,0 +1,17 @@
+@use "../../../theme/abstracts/mixins" as *;
+
+ion-item {
+  color: black;
+  padding: 10px;
+  display: flex;
+}
+
+ion-icon {
+  margin-right: 10px;
+
+}
+
+.iconContainer {
+  width: 30px;
+  @include flex-center;
+}

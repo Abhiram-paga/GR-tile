@@ -1,0 +1,11 @@
+@use "../../../../theme/abstracts/variables" as *;
+
+.search__bar {
+  --background: $white-color;
+  --color: #08668d;
+  --placeholder-color: $main-color;
+  --icon-color: #08668d;
+  --clear-button-color: #fff;
+
+  --border-radius: 4px;
+}

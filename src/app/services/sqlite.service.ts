@@ -105,12 +105,27 @@ export class SqliteService {
     }
   }
 
-  async deleteAllRows(tableName:string){
-    try{ 
+  async deleteAllRows(tableName: string) {
+    try {
       await this.db?.run(`DELETE FROM ${tableName}`);
       console.log(`Deleted All rows from table:${tableName}`);
-    }catch(err){
-      console.log(`Error in deleting rows of ${tableName}`,err);
+    } catch (err) {
+      console.log(`Error in deleting rows of ${tableName}`, err);
+    }
+  }
+
+  async createTableForCSVRes(tableName: string, data:any) {
+    try {
+      const columns = data[0].map((col: String) =>
+        col.includes('_PK') ? `${col} text PRIMARY KEY` : `${col} text`
+      );
+      const createTableQuery = `CREATE TABLE IF NOT EXISTS ${tableName}(${columns.join(
+        ','
+      )})`;
+      await this.db?.run(createTableQuery);
+      console.log(`${tableName} created successfully`);
+    } catch (err) {
+      console.log('Error in creating table for csv response:', err);
     }
   }
 }

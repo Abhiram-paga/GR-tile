@@ -8,3 +8,7 @@
 .demo-button {
   @include styled-button(#ffffff, $main-color);
 }
+
+.confirm__button {
+  @include styled-button($main-color, #ffffff);
+}

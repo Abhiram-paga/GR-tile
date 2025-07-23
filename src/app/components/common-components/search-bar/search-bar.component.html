@@ -1,0 +1,7 @@
+<ion-searchbar
+  placeholder="Search Organization"
+  class="search__bar"
+  showCancelButton="focus"
+  (ionInput)="handleSearchChange($event)"
+  [debounce]="500"
+></ion-searchbar>

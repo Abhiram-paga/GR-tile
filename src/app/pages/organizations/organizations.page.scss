@@ -1,0 +1,8 @@
+@use "../../../theme/abstracts/variables" as *;
+
+.orgHeader {
+  text-align: center;
+  background-color:$main-color;
+  --background:$main-color;
+  color: #ffffff;
+}

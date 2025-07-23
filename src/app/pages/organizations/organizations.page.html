@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="orgHeader">
+    <ion-title>Select Organization</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <app-refresher (onRefresherEmit)="onRefreher($event)">
+    <app-search-bar (searchInputChanged)="handleChangeOrgName($event)"/>
+    <app-organization-list [organizationsList]="organizationsList" />
+  </app-refresher>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <app-button
+      label="Confirm"
+      fill="solid"
+      type="button"
+      [disabled]="!organizationService.selectedOrdId"
+      class="confirm__button"
+      (buttonClicked)="confirmOrgClick()"
+    ></app-button>
+  </ion-toolbar>
+</ion-footer>

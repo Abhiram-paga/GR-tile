@@ -1,0 +1,12 @@
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to fetch"
+      refreshingSpinner="circles"
+      refreshingText="Fetching..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+  <ng-content></ng-content>
+</ion-content>

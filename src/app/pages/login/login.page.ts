@@ -5,11 +5,19 @@ import { IonContent } from '@ionic/angular/standalone';
 import { LoginFormComponent } from 'src/app/components/login-form/login-form.component';
 import { LOGOS } from 'src/assets/logo';
 import { UserService } from 'src/app/services/user.service';
-import { IRoot, IUser } from 'src/app/models/user.interface';
-import { Subscription } from 'rxjs';
+import {
+  IData,
+  IMetadata,
+  IOrg,
+  IRoot,
+  IUser,
+} from 'src/app/models/user.interface';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { CommunicationService } from 'src/app/services/communication.service';
 import { ModelLoaderService } from 'src/app/services/model-loader.service';
 import { SqliteService } from 'src/app/services/sqlite.service';
+import { OrganisationService } from 'src/app/services/organisation.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +34,9 @@ export class LoginPage {
     inject(CommunicationService);
   private loaderService: ModelLoaderService = inject(ModelLoaderService);
   private sqliteService: SqliteService = inject(SqliteService);
+  private organizationService: OrganisationService =
+    inject(OrganisationService);
+  private router: Router = inject(Router);
 
   subscriptions: Subscription = new Subscription();
 
@@ -45,18 +56,34 @@ export class LoginPage {
         next: async (res: IRoot) => {
           console.log(res);
           this.loaderService.hide();
-          await this.sqliteService.createTable(
-            res.metadata,
-            'responsibilities'
+
+          await this.userService.handelLoginResponse(res);
+          const responsibilities: IData[] =
+            await this.sqliteService.getTableRows('responsibilities');
+          this.userService.userResponsibilitiesSub.next(responsibilities);
+          const filteredResponsibilities = responsibilities.filter(
+            (responsibility) => responsibility.DEFAULT_ORG_ID
           );
-          await this.sqliteService.deleteAllRows('responsibilities');
-          await this.sqliteService.insertValuesToTable(
-            'responsibilities',
-            res.data,
-            res.metadata
-          );
-          this.sqliteService.getTableRows('responsibilities');
+          const dOrgId: string = filteredResponsibilities[0].DEFAULT_ORG_ID;
+          this.organizationService.defaultOrgId = dOrgId;
+          const sub3 = this.organizationService
+            .getInventoryOrganizationsTable(dOrgId)
+            .subscribe({
+              next: async (res) => {
+                this.communicationService.manageCsvApiResponse(
+                  res,
+                  'organizationTable'
+                );
+
+                this.router.navigate(['/organizations']);
+              },
+              error: (err) => {
+                console.log(err);
+              },
+            });
+          this.subscriptions.add(sub3);
         },
+
         error: (err) => {
           console.log(err);
         },

@@ -1,0 +1,19 @@
+<ion-list lines="full">
+  <ion-item
+    *ngFor="let organization of organizationsList; trackBy: trackByOrg"
+    (click)="changeSelectedOrg(organization.InventoryOrgId_PK)"
+  >
+    <div class="iconContainer">
+      <ion-icon
+        name="checkmark-circle"
+        color="success"
+        size="large"
+        *ngIf="selectedOrgId === organization.InventoryOrgId_PK"
+      ></ion-icon>
+    </div>
+    <div class="orgNameContainer">
+      <ion-label>{{ organization.InventoryOrgCode }}</ion-label>
+      <p>{{ organization.InventoryOrgName }}</p>
+    </div>
+  </ion-item>
+</ion-list>

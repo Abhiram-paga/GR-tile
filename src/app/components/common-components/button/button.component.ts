@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 
 @Component({
@@ -13,4 +13,10 @@ export class ButtonComponent {
   @Input() fill: 'clear' | 'outline' | 'solid' = 'solid';
   @Input() expand:'full' | 'block'='block';
   @Input() class:string='';
+  @Input() disabled:Boolean=false;
+  @Output() buttonClicked=new EventEmitter<any>();
+
+  handleClick(){
+    this.buttonClicked.emit();  
+  }
 }
