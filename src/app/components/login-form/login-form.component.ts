@@ -43,9 +43,9 @@ export class LoginFormComponent {
   handleSubmit() {
     const username = this.loginForm.get('username')?.value ?? '';
     const password = this.loginForm.get('password')?.value ?? '';
-    if (this.loginForm.get('username')?.value === null) {
+    if (!this.loginForm.get('username')?.value) {
       this.toastService.showToast('Enter username', bug, 'danger');
-    } else if (this.loginForm.get('password')?.value === null) {
+    } else if (!this.loginForm.get('password')?.value) {
       this.toastService.showToast('Enter password', bug, 'danger');
     } else {
       this.communicationService.triggerAction({ username, password });

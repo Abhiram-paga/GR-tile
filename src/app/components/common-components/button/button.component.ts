@@ -8,15 +8,15 @@ import { IonicModule } from '@ionic/angular';
   imports: [IonicModule],
 })
 export class ButtonComponent {
-  @Input() label: String = 'Click';
+  @Input() label: string = 'Click';
   @Input() type: 'submit' | 'button' = 'button';
   @Input() fill: 'clear' | 'outline' | 'solid' = 'solid';
-  @Input() expand:'full' | 'block'='block';
-  @Input() class:string='';
-  @Input() disabled:Boolean=false;
-  @Output() buttonClicked=new EventEmitter<any>();
+  @Input() expand: 'full' | 'block' = 'block';
+  @Input() class: string = '';
+  @Input() disabled: boolean = false;
+  @Output() buttonClicked = new EventEmitter<any>();
 
-  handleClick(){
-    this.buttonClicked.emit();  
+  handleClick() {
+    this.buttonClicked.emit();
   }
 }

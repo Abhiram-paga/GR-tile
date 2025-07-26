@@ -1,0 +1,16 @@
+<ion-header [translucent]="true" class="activityHeader">
+  <div>
+    <ion-title>Activity Screen</ion-title>
+    <ion-icon
+      name="log-out"
+      color="dark"
+      button="true"
+      trigger="present-alert"
+      (click)="modelAlertService.presentAlert('LOGOUT+CLEAR DATA','Are you sure you want to Logout + Clear Data from app? All Pending Transactions will be synced in background.')"
+    ></ion-icon>
+  </div>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <app-activity-card [apiStatusList]="apiStatusDetails" />
+</ion-content>

@@ -9,25 +9,24 @@ import { SqliteService } from './sqlite.service';
 })
 export class OrganisationService {
   private apiService: ApiRequestService = inject(ApiRequestService);
-  private sqliteService:SqliteService=inject(SqliteService)
+  private sqliteService: SqliteService = inject(SqliteService);
 
-    organizationsSub = new BehaviorSubject<IOrg[]>([]);
+  organizationsSub = new BehaviorSubject<IOrg[]>([]);
   organizations$: Observable<IOrg[]> = this.organizationsSub.asObservable();
 
-  defaultOrgId:string='';
-  selectedOrdId:string='';
+  defaultOrgId: string = '';
+  selectedOrgId: string = '';
+  selectedBusinessUnitId:string='';
 
   getInventoryOrganizationsTable(defaulOrgID: string) {
     return this.apiService.request(
       'GET',
-      `23A/getInventoryOrganizationsTable/${defaulOrgID}`,
+      `/EBS/23A/getInventoryOrganizationsTable/${defaulOrgID}`,
       {}
     );
   }
 
-
-
-   async handleGetOrganizationTableRes(jsonRes: IOrg[], metaData: IMetadata[]) {
+  async handleGetOrganizationTableRes(jsonRes: IOrg[], metaData: IMetadata[]) {
     await this.sqliteService.createTable(metaData, 'organizationTable');
     await this.sqliteService.deleteAllRows('organizationTable');
     await this.sqliteService.insertValuesToTable(

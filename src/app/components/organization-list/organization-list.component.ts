@@ -14,12 +14,12 @@ import { OrganisationService } from 'src/app/services/organisation.service';
   imports: [IonicModule, ScrollingModule, CommonModule],
 })
 export class OrganizationListComponent implements OnInit {
-  private oraganizationService:OrganisationService=inject(OrganisationService);
+  private oraganizationService: OrganisationService =
+    inject(OrganisationService);
 
   @Input() organizationsList: IOrg[] = [];
 
   selectedOrgId: string = '';
-
 
   constructor() {
     addIcons({
@@ -31,15 +31,13 @@ export class OrganizationListComponent implements OnInit {
     return org.InventoryOrgId_PK;
   }
 
-  handleClick(): void {
-    console.log(this.organizationsList);
-  }
 
-  changeSelectedOrg(selectedOrgId: string) {
+
+  changeSelectedOrg(selectedOrgId: string, businessUnitId: string) {
     this.selectedOrgId = selectedOrgId;
-    this.oraganizationService.selectedOrdId=selectedOrgId;
+    this.oraganizationService.selectedOrgId = selectedOrgId;
+    this.oraganizationService.selectedBusinessUnitId = businessUnitId;
   }
-
 
   ngOnInit() {}
 }

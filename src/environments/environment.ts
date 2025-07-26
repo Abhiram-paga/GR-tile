@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://testnode.propelapps.com/EBS/',
+  apiUrl: 'https://testnode.propelapps.com',
 };
 
 /*

@@ -3,18 +3,28 @@ export interface IUser {
   password: string | number;
 }
 
-export interface IRoot {
+export interface IUserLogin {
   metadata: IMetadata[];
-  data: IData[];
+  data: IUserLoginRes[];
 }
 
 export interface IMetadata {
   name: string;
   type: string;
-  primaryKey?: string ;
+  ebs?: string;
+  cloud?: string;
+  ords?: string;
+  primarykey?: boolean;
+  isExist?: IsExist;
 }
 
-export interface IData {
+export interface IsExist {
+  ebs: boolean;
+  cloud: boolean;
+  ords: boolean;
+}
+
+export interface IUserLoginRes {
   STATUS: string;
   USER_NAME: string;
   USER_ID: string;

@@ -17,6 +17,7 @@ import { CommunicationService } from 'src/app/services/communication.service';
 import { OrganizationListComponent } from 'src/app/components/organization-list/organization-list.component';
 import { ButtonComponent } from 'src/app/components/common-components/button/button.component';
 import { SearchBarComponent } from 'src/app/components/common-components/search-bar/search-bar.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-organizations',
@@ -41,6 +42,7 @@ export class OrganizationsPage {
   organizationService: OrganisationService = inject(OrganisationService);
   private communicationService: CommunicationService =
     inject(CommunicationService);
+  router:Router=inject(Router)
 
   subscriptions: Subscription = new Subscription();
   organizationsList: IOrg[] = [];
@@ -76,10 +78,10 @@ export class OrganizationsPage {
   }
 
   confirmOrgClick() {
-    console.log(this.organizationService.selectedOrdId);
+    this.router.navigate(['/activity'])
   }
 
-  handleChangeOrgName(searchText:string) {
+  handleChangeOrgName(searchText: string) {
     const sub2 = this.organizationService.organizations$
       .pipe(
         map((list) =>

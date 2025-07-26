@@ -1,0 +1,176 @@
+import { inject, Injectable } from '@angular/core';
+import { API_RESPONSIBILITY, API_STATUS, API_TYPE } from '../enums/api-details';
+import { OrganisationService } from './organisation.service';
+import { SqliteService } from './sqlite.service';
+import { USER_RESPONSIBILIES } from '../enums/user';
+import { IApiDetails } from '../models/api.interface';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ResponsibilitiesService {
+  constructor() {}
+
+  private organizationService: OrganisationService =
+    inject(OrganisationService);
+  private sqliteService: SqliteService = inject(SqliteService);
+
+  ALL_API_LIST: IApiDetails[] = [
+    {
+      isCsv: true,
+      metadataUrl: '',
+      apiUrl: `/EBS/20D/getItemsTable/${this.organizationService.selectedOrgId}/%22%22`,
+      type: API_TYPE.MASTER,
+      tableName: 'items',
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: '',
+      responsibility: API_RESPONSIBILITY.GET_ITEMS,
+      message: '',
+    },
+    {
+      isCsv: true,
+      metadataUrl: '',
+      apiUrl: `/EBS/22A/getSerialTableType/${this.organizationService.selectedOrgId}/%22/473574/476650`,
+      type: API_TYPE.TRANSACTIONAL,
+      tableName: 'serials',
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: '',
+      responsibility: API_RESPONSIBILITY.GET_SERIALS_TABLE_TYPE,
+      message: '',
+    },
+    {
+      isCsv: false,
+      metadataUrl: `/EBS/20D/getSubinventories/metadata`,
+      apiUrl: `/EBS/20D/getSubinventories/${this.organizationService.selectedOrgId}/%22null%22/%22Y%22/`,
+      type: API_TYPE.MASTER,
+      tableName: 'subInventories',
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: 'ActiveSubInventories',
+      responsibility: API_RESPONSIBILITY.GET_SUBINVENTORIES,
+      message: '',
+    },
+    {
+      isCsv: true,
+      metadataUrl: '',
+      apiUrl: `/EBS/23A/getLocatorsTable/${this.organizationService.selectedOrgId}/%22%22`,
+      type: API_TYPE.MASTER,
+      tableName: 'locators',
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: '',
+      responsibility: API_RESPONSIBILITY.GET_LOCATORS,
+      message: '',
+    },
+    {
+      isCsv: false,
+      metadataUrl: '/EBS/20D/getGLPeriodsmetadata',
+      apiUrl: `/EBS/20D/getGLPeriods/${this.organizationService.selectedOrgId}`,
+      type: API_TYPE.CONFIG,
+      tableName: 'glPeriods',
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: 'GLPeriods',
+      responsibility: API_RESPONSIBILITY.GET_GL_PERIODS,
+      message: '',
+    },
+    {
+      isCsv: false,
+      metadataUrl: '/EBS/20D/getDocumentsForReceiving/metadata',
+      apiUrl: `/EBS/20D/getDocumentsForReceiving/${this.organizationService.selectedOrgId}/%22null%22/%22Y%22`,
+      type: API_TYPE.TRANSACTIONAL,
+      tableName: 'documentsForReceiving',
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: 'Docs4Receiving',
+      responsibility: API_RESPONSIBILITY.GET_DOCUMENTS_FOR_RECEIVING,
+      message: '',
+    },
+    {
+      isCsv: true,
+      metadataUrl: '',
+      apiUrl: `/EBS/22A/getLotsTableType/${this.organizationService.selectedOrgId}/%22%22`,
+      type: API_TYPE.TRANSACTIONAL,
+      tableName: 'lotsTable',
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: '',
+      responsibility: API_RESPONSIBILITY.GET_LOTS_TABLE_TYPE,
+      message: '',
+    },
+    {
+      isCsv: true,
+      metadataUrl: '',
+      apiUrl: `/EBS/22C/getOnHandWMSFilterTableType/${this.organizationService.selectedOrgId}/Central/''/S-16190`,
+      type: API_TYPE.TRANSACTIONAL,
+      tableName: 'onHandWMSFilter',
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: '',
+      responsibility: API_RESPONSIBILITY.GET_ON_HAND_WMS_FILTER_TABLE,
+      message: '',
+    },
+    {
+      isCsv: false,
+      metadataUrl: '/EBS/20D/getInventoryPeriods/metadata',
+      apiUrl: `/EBS/20D/getInventoryPeriods/${this.organizationService.selectedBusinessUnitId}/
+                ${this.organizationService.selectedOrgId}`,
+      type: API_TYPE.CONFIG,
+      tableName: 'inventoryPeriods',
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: 'InventoryPeriods',
+      responsibility: API_RESPONSIBILITY.GET_INVENTORY_PERIODS,
+      message: '',
+    },
+    {
+      isCsv: false,
+      metadataUrl: '/EBS/20D/getLocations/metadata',
+      apiUrl: '/EBS/20D/getLocations/%22null%22/%22Y%22',
+      type: API_TYPE.MASTER,
+      tableName: 'locations',
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: 'LocationList',
+      responsibility: API_RESPONSIBILITY.GET_LOCATIONS,
+      message: '',
+    },
+  ];
+
+  apiStatusSubject = new BehaviorSubject<IApiDetails[]>(this.ALL_API_LIST);
+  apiStatus$: Observable<IApiDetails[]> = this.apiStatusSubject.asObservable();
+
+  async getResponsibilities() {
+    try {
+      let apisResponsibilities: string[] = [];
+      let userLoginApiResponse: string[] = (
+        await this.sqliteService.getTableRows('responsibilities')
+      ).map((responsibility) => {
+        return responsibility.RESPONSIBILITY;
+      });
+      if (userLoginApiResponse.includes(USER_RESPONSIBILIES.GOOD_RECEIPT)) {
+        apisResponsibilities.push(API_RESPONSIBILITY.GET_ITEMS);
+        apisResponsibilities.push(API_RESPONSIBILITY.GET_SERIALS_TABLE_TYPE);
+        apisResponsibilities.push(API_RESPONSIBILITY.GET_SUBINVENTORIES);
+        apisResponsibilities.push(API_RESPONSIBILITY.GET_GL_PERIODS);
+        apisResponsibilities.push(API_RESPONSIBILITY.GET_LOCATORS);
+        apisResponsibilities.push(API_RESPONSIBILITY.GET_INVENTORY_PERIODS);
+        apisResponsibilities.push(
+          API_RESPONSIBILITY.GET_DOCUMENTS_FOR_RECEIVING
+        );
+        apisResponsibilities.push(API_RESPONSIBILITY.GET_LOTS_TABLE_TYPE);
+        apisResponsibilities.push(
+          API_RESPONSIBILITY.GET_ON_HAND_WMS_FILTER_TABLE
+        );
+      }
+
+      return apisResponsibilities;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  updateApiStatus(responsibility: string, newStatus: API_STATUS) {
+    const index = this.ALL_API_LIST.findIndex(
+      (api) => api.responsibility === responsibility
+    );
+    if (index !== -1) {
+      this.ALL_API_LIST[index].apiStatus = newStatus;
+      this.apiStatusSubject.next([...this.ALL_API_LIST]);
+    }
+  }
+}

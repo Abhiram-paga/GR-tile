@@ -6,13 +6,11 @@ import { LoginFormComponent } from 'src/app/components/login-form/login-form.com
 import { LOGOS } from 'src/assets/logo';
 import { UserService } from 'src/app/services/user.service';
 import {
-  IData,
-  IMetadata,
-  IOrg,
-  IRoot,
+  IUserLogin,
   IUser,
+  IUserLoginRes,
 } from 'src/app/models/user.interface';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CommunicationService } from 'src/app/services/communication.service';
 import { ModelLoaderService } from 'src/app/services/model-loader.service';
 import { SqliteService } from 'src/app/services/sqlite.service';
@@ -53,21 +51,24 @@ export class LoginPage {
     await this.loaderService.show();
     try {
       const sub1 = this.userService.loginUser(user).subscribe({
-        next: async (res: IRoot) => {
+        next: async (res: IUserLogin) => {
           console.log(res);
           this.loaderService.hide();
-
+          
           await this.userService.handelLoginResponse(res);
-          const responsibilities: IData[] =
+
+          const responsibilities: IUserLoginRes[] =
             await this.sqliteService.getTableRows('responsibilities');
-          this.userService.userResponsibilitiesSub.next(responsibilities);
+          this.userService.userLoginResponseResponsibilities = responsibilities;
           const filteredResponsibilities = responsibilities.filter(
             (responsibility) => responsibility.DEFAULT_ORG_ID
           );
-          const dOrgId: string = filteredResponsibilities[0].DEFAULT_ORG_ID;
-          this.organizationService.defaultOrgId = dOrgId;
+          
+          const defaultOrgId: string =
+            filteredResponsibilities[0].DEFAULT_ORG_ID;
+          this.organizationService.defaultOrgId = defaultOrgId;
           const sub3 = this.organizationService
-            .getInventoryOrganizationsTable(dOrgId)
+            .getInventoryOrganizationsTable(defaultOrgId)
             .subscribe({
               next: async (res) => {
                 this.communicationService.manageCsvApiResponse(

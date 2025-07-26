@@ -1,36 +1,50 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiRequestService } from './api-request.service';
-import { IData, IRoot, IUser } from '../models/user.interface';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { IUserLogin, IUser, IUserLoginRes } from '../models/user.interface';
+import { Observable } from 'rxjs';
 import { SqliteService } from './sqlite.service';
+import { CommunicationService } from './communication.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private readonly apiService: ApiRequestService = inject(ApiRequestService);
-  private sqliteService:SqliteService=inject(SqliteService);
+  private sqliteService: SqliteService = inject(SqliteService);
+  private commonService: CommunicationService = inject(CommunicationService);
 
-  userResponsibilitiesSub = new BehaviorSubject<IData[]>([]);
-  userResponsibilities$: Observable<IData[]> =
-    this.userResponsibilitiesSub.asObservable();
-  constructor() {}
+  userLoginResponseResponsibilities: IUserLoginRes[] = [];
+  // userResponsibilitiesSub = new BehaviorSubject<IData[]>([]);
+  // userResponsibilities$: Observable<IData[]> =
+  //   this.userResponsibilitiesSub.asObservable();
+  // constructor() {}
 
-  loginUser(user: IUser): Observable<IRoot> {
-    return this.apiService.request<IRoot>('POST', '20D/login', {
+  loginUser(user: IUser): Observable<IUserLogin> {
+    return this.apiService.request<IUserLogin>('POST', '/EBS/20D/login', {
       ...user,
       isSSO: 'N',
     });
   }
 
-   async handelLoginResponse(res: IRoot) {
-    await this.sqliteService.createTable(res.metadata, 'responsibilities');
-    await this.sqliteService.deleteAllRows('responsibilities');
-    await this.sqliteService.insertValuesToTable(
-      'responsibilities',
-      res.data,
-      res.metadata
-    );
-  }
+  async handelLoginResponse(res: IUserLogin) {
+    try {
+      await this.sqliteService.createTable(res.metadata, 'responsibilities');
+      await this.sqliteService.deleteAllRows('responsibilities');
+      let chunks = this.commonService.divideResponseIntoChunks(res.data, 50);
+      await Promise.all(
+        chunks.map((chunk) =>
+          this.sqliteService.insertValuesToTable(
+            'responsibilities',
+            chunk,
+            res.metadata
+          )
+        )
+      );
 
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
 }
