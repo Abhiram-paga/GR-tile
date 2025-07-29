@@ -22,4 +22,5 @@ export const routes: Routes = [
     path: 'activity',
     loadComponent: () => import('./pages/activity/activity.page').then( m => m.ActivityPage)
   },
+
 ];

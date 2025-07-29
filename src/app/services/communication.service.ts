@@ -64,7 +64,7 @@ export class CommunicationService {
           responsibility: apiDetails.responsibility,
           apiType: apiDetails.type,
           statusCode: 204,
-          message: 'No Content',
+          message: 'no content',
         };
       }
       let jsonRes;
@@ -107,7 +107,7 @@ export class CommunicationService {
         responsibility: apiDetails.responsibility,
         apiType: apiDetails.type,
         statusCode: 500,
-        message: err || 'Internal server error',
+        message: 'Internal server error',
       };
     }
   }

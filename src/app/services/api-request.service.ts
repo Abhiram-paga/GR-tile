@@ -17,6 +17,7 @@ export class ApiRequestService {
     return this.http
       .request(method, fullUrl, {
         body: method === 'GET' || method === 'DELETE' ? undefined : body,
+        
       })
       .pipe(
         catchError((error) => {

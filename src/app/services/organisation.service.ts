@@ -16,23 +16,13 @@ export class OrganisationService {
 
   defaultOrgId: string = '';
   selectedOrgId: string = '';
-  selectedBusinessUnitId:string='';
+  selectedBusinessUnitId: string = '';
 
   getInventoryOrganizationsTable(defaulOrgID: string) {
     return this.apiService.request(
       'GET',
       `/EBS/23A/getInventoryOrganizationsTable/${defaulOrgID}`,
       {}
-    );
-  }
-
-  async handleGetOrganizationTableRes(jsonRes: IOrg[], metaData: IMetadata[]) {
-    await this.sqliteService.createTable(metaData, 'organizationTable');
-    await this.sqliteService.deleteAllRows('organizationTable');
-    await this.sqliteService.insertValuesToTable(
-      'organizationTable',
-      jsonRes,
-      metaData
     );
   }
 }

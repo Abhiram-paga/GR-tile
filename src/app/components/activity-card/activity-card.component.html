@@ -1,5 +1,33 @@
 <cdk-virtual-scroll-viewport itemSize="80" class="virtualScroll">
-  <ion-card *ngFor="let apiStatus of apiStatusList" >
-    {{ apiStatus.apiStatus }}
-  </ion-card>
+  <ng-container
+    *ngFor="let apiStatus of apiStatusList; trackBy: trackByResponsibility"
+  >
+    <ion-card
+      *ngIf="apiUserResponsibilties.includes(apiStatus.responsibility)"
+      [@slideInRight]
+    >
+      <div class="iconSpinnerContainer">
+        <ion-spinner
+          name="circles"
+          *ngIf="
+            apiStatus.apiStatus === 'initial' ||
+            apiStatus.apiStatus === 'pending'
+          "
+        ></ion-spinner>
+        <ion-icon
+          *ngIf="
+            apiStatus.apiStatus === 'success' ||
+            apiStatus.apiStatus === 'failed'
+          "
+          [name]="
+            apiStatus.apiStatus === 'success'
+              ? 'checkmark-circle'
+              : 'close-circle'
+          "
+          [color]="apiStatus.apiStatus === 'success' ? 'success' : 'danger'"
+        ></ion-icon>
+      </div>
+      <p>{{ apiStatus.message }}</p>
+    </ion-card>
+  </ng-container>
 </cdk-virtual-scroll-viewport>

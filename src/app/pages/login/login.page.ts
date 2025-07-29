@@ -39,22 +39,19 @@ export class LoginPage {
   subscriptions: Subscription = new Subscription();
 
   ngOnInit() {
-    const sub2 = this.communicationService.action$.subscribe({
+    const subscription2 = this.communicationService.action$.subscribe({
       next: (res: IUser) => {
         this.handleFormSubmission(res);
       },
     });
-    this.subscriptions.add(sub2);
+    this.subscriptions.add(subscription2);
   }
 
   async handleFormSubmission(user: IUser) {
-    await this.loaderService.show();
+    await this.loaderService.showLoader();
     try {
-      const sub1 = this.userService.loginUser(user).subscribe({
+      const subscription1 = this.userService.loginUser(user).subscribe({
         next: async (res: IUserLogin) => {
-          console.log(res);
-          this.loaderService.hide();
-          
           await this.userService.handelLoginResponse(res);
 
           const responsibilities: IUserLoginRes[] =
@@ -63,11 +60,11 @@ export class LoginPage {
           const filteredResponsibilities = responsibilities.filter(
             (responsibility) => responsibility.DEFAULT_ORG_ID
           );
-          
+
           const defaultOrgId: string =
             filteredResponsibilities[0].DEFAULT_ORG_ID;
           this.organizationService.defaultOrgId = defaultOrgId;
-          const sub3 = this.organizationService
+          const subscription3 = this.organizationService
             .getInventoryOrganizationsTable(defaultOrgId)
             .subscribe({
               next: async (res) => {
@@ -75,21 +72,21 @@ export class LoginPage {
                   res,
                   'organizationTable'
                 );
-
+                this.loaderService.hideLoader();
                 this.router.navigate(['/organizations']);
               },
               error: (err) => {
                 console.log(err);
               },
             });
-          this.subscriptions.add(sub3);
+          this.subscriptions.add(subscription3);
         },
 
         error: (err) => {
           console.log(err);
         },
       });
-      this.subscriptions.add(sub1);
+      this.subscriptions.add(subscription1);
     } catch (err) {
       console.log(err);
     }

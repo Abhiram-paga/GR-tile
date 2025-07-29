@@ -26,7 +26,7 @@ export class ResponsibilitiesService {
       apiStatus: API_STATUS.INITIAL,
       responseKey: '',
       responsibility: API_RESPONSIBILITY.GET_ITEMS,
-      message: '',
+      message: 'Get Items Table',
     },
     {
       isCsv: true,
@@ -37,7 +37,7 @@ export class ResponsibilitiesService {
       apiStatus: API_STATUS.INITIAL,
       responseKey: '',
       responsibility: API_RESPONSIBILITY.GET_SERIALS_TABLE_TYPE,
-      message: '',
+      message: 'Serial Table Type',
     },
     {
       isCsv: false,
@@ -48,7 +48,7 @@ export class ResponsibilitiesService {
       apiStatus: API_STATUS.INITIAL,
       responseKey: 'ActiveSubInventories',
       responsibility: API_RESPONSIBILITY.GET_SUBINVENTORIES,
-      message: '',
+      message: 'Get Subinventories',
     },
     {
       isCsv: true,
@@ -59,18 +59,18 @@ export class ResponsibilitiesService {
       apiStatus: API_STATUS.INITIAL,
       responseKey: '',
       responsibility: API_RESPONSIBILITY.GET_LOCATORS,
-      message: '',
+      message: 'Get Locators Table',
     },
     {
       isCsv: false,
       metadataUrl: '/EBS/20D/getGLPeriodsmetadata',
-      apiUrl: `/EBS/20D/getGLPeriods/${this.organizationService.selectedOrgId}`,
+      apiUrl: `/EBS/20D/getGLPeriods/${this.organizationService.defaultOrgId}`,
       type: API_TYPE.CONFIG,
       tableName: 'glPeriods',
       apiStatus: API_STATUS.INITIAL,
       responseKey: 'GLPeriods',
       responsibility: API_RESPONSIBILITY.GET_GL_PERIODS,
-      message: '',
+      message: 'Get GLPeriods',
     },
     {
       isCsv: false,
@@ -81,7 +81,7 @@ export class ResponsibilitiesService {
       apiStatus: API_STATUS.INITIAL,
       responseKey: 'Docs4Receiving',
       responsibility: API_RESPONSIBILITY.GET_DOCUMENTS_FOR_RECEIVING,
-      message: '',
+      message: 'Get Documents For Receiving',
     },
     {
       isCsv: true,
@@ -92,7 +92,7 @@ export class ResponsibilitiesService {
       apiStatus: API_STATUS.INITIAL,
       responseKey: '',
       responsibility: API_RESPONSIBILITY.GET_LOTS_TABLE_TYPE,
-      message: '',
+      message: 'Get Lots Table Type',
     },
     {
       isCsv: true,
@@ -103,7 +103,7 @@ export class ResponsibilitiesService {
       apiStatus: API_STATUS.INITIAL,
       responseKey: '',
       responsibility: API_RESPONSIBILITY.GET_ON_HAND_WMS_FILTER_TABLE,
-      message: '',
+      message: 'Get On Hands WMS Filters',
     },
     {
       isCsv: false,
@@ -115,7 +115,7 @@ export class ResponsibilitiesService {
       apiStatus: API_STATUS.INITIAL,
       responseKey: 'InventoryPeriods',
       responsibility: API_RESPONSIBILITY.GET_INVENTORY_PERIODS,
-      message: '',
+      message: 'Get Inventory Periods',
     },
     {
       isCsv: false,
@@ -126,7 +126,7 @@ export class ResponsibilitiesService {
       apiStatus: API_STATUS.INITIAL,
       responseKey: 'LocationList',
       responsibility: API_RESPONSIBILITY.GET_LOCATIONS,
-      message: '',
+      message: 'Get Locations',
     },
   ];
 

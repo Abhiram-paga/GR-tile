@@ -12,3 +12,7 @@
 .confirm__button {
   @include styled-button($main-color, #ffffff);
 }
+
+.sync-button {
+  @include styled-button($main-color, #ffffff);
+}

@@ -13,4 +13,11 @@
 
 <ion-content [fullscreen]="true">
   <app-activity-card [apiStatusList]="apiStatusDetails" />
+  <app-button
+    *ngIf="reSync"
+    (buttonClicked)="reSyncFailedApis()"
+    expand="full"
+    label="Sync Again"
+    class="sync-button"
+  />
 </ion-content>

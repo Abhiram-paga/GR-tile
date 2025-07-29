@@ -18,6 +18,5 @@ export class AppComponent {
   async initializeDB() {
     await this.platform.ready();
     await this.sqliteService.initDB();
-   
   }
 }

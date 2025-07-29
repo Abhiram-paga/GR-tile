@@ -26,10 +26,10 @@ export class ModelLoaderService {
     },
   ];
 
-  async show(): Promise<void> {
+  async showLoader(): Promise<void> {
     try {
       this.loading = await this.loaderController.create({
-        message: 'Loading...',
+        message: 'Please Wait...',
         spinner: 'lines',
         translucent: true,
         backdropDismiss: false,
@@ -40,7 +40,7 @@ export class ModelLoaderService {
     }
   }
 
-  async hide() {
+  async hideLoader() {
     try {
       if (this.loading) {
         await this.loading.dismiss();

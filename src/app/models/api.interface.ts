@@ -16,5 +16,5 @@ export interface IApiResponse {
   responsibility: API_RESPONSIBILITY;
   apiType: API_TYPE;
   statusCode: number;
-  message: string;
+  message: string ;
 }
