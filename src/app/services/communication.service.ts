@@ -5,6 +5,7 @@ import { SqliteService } from './sqlite.service';
 import { OrganisationService } from './organisation.service';
 import { ApiRequestService } from './api-request.service';
 import { IApiDetails } from '../models/api.interface';
+import { API_TABLE_NAMES } from '../enums/api-details';
 
 @Injectable({
   providedIn: 'root',
@@ -120,14 +121,14 @@ export class CommunicationService {
     return chunks;
   }
 
-  async manageCsvApiResponse(res: any, tableName: string) {
+  async manageCsvApiResponse(res: any, tableName: API_TABLE_NAMES) {
     const jsonRes = this.convertCsvToJson(res);
     const metaData: IMetadata[] = this.getMetaDataForJson(jsonRes);
 
     await this.sqliteService.createTable(metaData, tableName);
     await this.sqliteService.deleteAllRows(tableName);
     await this.sqliteService.insertValuesToTable(tableName, jsonRes, metaData);
-    if (tableName === 'organizationTable') {
+    if (tableName === API_TABLE_NAMES.GET_ORGANIZATIONS) {
       const organizations: IOrg[] = await this.sqliteService.getTableRows(
         tableName
       );

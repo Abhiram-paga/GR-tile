@@ -5,6 +5,7 @@ import {
   SQLiteDBConnection,
 } from '@capacitor-community/sqlite';
 import { IMetadata } from '../models/user.interface';
+import { API_TABLE_NAMES } from '../enums/api-details';
 
 @Injectable({
   providedIn: 'root',
@@ -61,7 +62,7 @@ export class SqliteService {
           return `${data.name} ${data.type}`;
         })
         .join(',');
-      let createTableQuery: string = ``;
+      let createTableQuery: string;
       let primaryKeys = metadata.filter((metaobj) => metaobj.primarykey);
       if (primaryKeys.length > 0) {
         let primaryKeyColumns = primaryKeys
@@ -79,7 +80,7 @@ export class SqliteService {
     }
   }
 
-  async getTableRows(tableName: String) {
+  async getTableRows(tableName: API_TABLE_NAMES) {
     try {
       const rows = await this.db?.query(`SELECT * FROM ${tableName}`);
       if (!rows || !rows.values) {
@@ -90,8 +91,8 @@ export class SqliteService {
       console.log(`Rows from table '${tableName}':`, rows.values);
       return rows.values;
     } catch (err) {
-      console.log(err);
-      return [];
+      console.error(err);
+      throw Error('Error in getting table rows');
     }
   }
 
@@ -127,9 +128,27 @@ export class SqliteService {
     }
   }
 
+  async getRowsAfterGroupByFromDocs4Receive(
+    tableName: API_TABLE_NAMES,
+    groupByColumn: string | number | boolean
+  ) {
+    try {
+      const groupByQuery = `SELECT ${groupByColumn},PoType,VendorName,CustomerName,LastUpdateDate,Requestor,COUNT(*) as Count FROM ${tableName} WHERE ${groupByColumn} IS NOT NULL AND ${groupByColumn} != '' GROUP BY ${groupByColumn} ORDER BY Count`;
+      const result = await this.db?.query(groupByQuery);
+      console.log(result);
+      return result?.values ?? [];
+    } catch (err) {
+      console.error(
+        `Error in group by ${groupByColumn} in table ${tableName}`,
+        err
+      );
+      throw new Error('Error in groupBY');
+    }
+  }
+
   async createTableForCSVRes(tableName: string, data: any) {
     try {
-      const columns = data[0].map((col: String) =>
+      const columns = data[0].map((col: string) =>
         col.includes('_PK') ? `${col} text PRIMARY KEY` : `${col} text`
       );
       const createTableQuery = `CREATE TABLE IF NOT EXISTS ${tableName}(${columns.join(
@@ -138,7 +157,7 @@ export class SqliteService {
       await this.db?.run(createTableQuery);
       console.log(`${tableName} created successfully`);
     } catch (err) {
-      console.log('Error in creating table for csv response:', err);
+      console.error('Error in creating table for csv response:', err);
     }
   }
 }

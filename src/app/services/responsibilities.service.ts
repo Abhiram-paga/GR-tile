@@ -1,5 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { API_RESPONSIBILITY, API_STATUS, API_TYPE } from '../enums/api-details';
+import {
+  API_RESPONSIBILITY,
+  API_STATUS,
+  API_TABLE_NAMES,
+  API_TYPE,
+} from '../enums/api-details';
 import { OrganisationService } from './organisation.service';
 import { SqliteService } from './sqlite.service';
 import { USER_RESPONSIBILIES } from '../enums/user';
@@ -20,9 +25,11 @@ export class ResponsibilitiesService {
     {
       isCsv: true,
       metadataUrl: '',
-      apiUrl: `/EBS/20D/getItemsTable/${this.organizationService.selectedOrgId}/%22%22`,
+      apiUrl: `/EBS/20D/getItemsTable/${localStorage.getItem(
+        'selectedInvOrgId'
+      )}/%22%22`,
       type: API_TYPE.MASTER,
-      tableName: 'items',
+      tableName: API_TABLE_NAMES.GET_ITEMS,
       apiStatus: API_STATUS.INITIAL,
       responseKey: '',
       responsibility: API_RESPONSIBILITY.GET_ITEMS,
@@ -31,9 +38,11 @@ export class ResponsibilitiesService {
     {
       isCsv: true,
       metadataUrl: '',
-      apiUrl: `/EBS/22A/getSerialTableType/${this.organizationService.selectedOrgId}/%22/473574/476650`,
+      apiUrl: `/EBS/22A/getSerialTableType/${localStorage.getItem(
+        'selectedInvOrgId'
+      )}/%22/473574/476650`,
       type: API_TYPE.TRANSACTIONAL,
-      tableName: 'serials',
+      tableName: API_TABLE_NAMES.GET_SERIALS_TABLE_TYPE,
       apiStatus: API_STATUS.INITIAL,
       responseKey: '',
       responsibility: API_RESPONSIBILITY.GET_SERIALS_TABLE_TYPE,
@@ -42,9 +51,11 @@ export class ResponsibilitiesService {
     {
       isCsv: false,
       metadataUrl: `/EBS/20D/getSubinventories/metadata`,
-      apiUrl: `/EBS/20D/getSubinventories/${this.organizationService.selectedOrgId}/%22null%22/%22Y%22/`,
+      apiUrl: `/EBS/20D/getSubinventories/${localStorage.getItem(
+        'selectedInvOrgId'
+      )}/%22null%22/%22Y%22/`,
       type: API_TYPE.MASTER,
-      tableName: 'subInventories',
+      tableName: API_TABLE_NAMES.GET_SUBINVENTORIES,
       apiStatus: API_STATUS.INITIAL,
       responseKey: 'ActiveSubInventories',
       responsibility: API_RESPONSIBILITY.GET_SUBINVENTORIES,
@@ -53,9 +64,11 @@ export class ResponsibilitiesService {
     {
       isCsv: true,
       metadataUrl: '',
-      apiUrl: `/EBS/23A/getLocatorsTable/${this.organizationService.selectedOrgId}/%22%22`,
+      apiUrl: `/EBS/23A/getLocatorsTable/${localStorage.getItem(
+        'selectedInvOrgId'
+      )}/%22%22`,
       type: API_TYPE.MASTER,
-      tableName: 'locators',
+      tableName: API_TABLE_NAMES.GET_LOCATORS,
       apiStatus: API_STATUS.INITIAL,
       responseKey: '',
       responsibility: API_RESPONSIBILITY.GET_LOCATORS,
@@ -64,9 +77,9 @@ export class ResponsibilitiesService {
     {
       isCsv: false,
       metadataUrl: '/EBS/20D/getGLPeriodsmetadata',
-      apiUrl: `/EBS/20D/getGLPeriods/${this.organizationService.defaultOrgId}`,
+      apiUrl: `/EBS/20D/getGLPeriods/${localStorage.getItem('defaultOrgId')}`,
       type: API_TYPE.CONFIG,
-      tableName: 'glPeriods',
+      tableName: API_TABLE_NAMES.GET_GL_PERIODS,
       apiStatus: API_STATUS.INITIAL,
       responseKey: 'GLPeriods',
       responsibility: API_RESPONSIBILITY.GET_GL_PERIODS,
@@ -75,9 +88,11 @@ export class ResponsibilitiesService {
     {
       isCsv: false,
       metadataUrl: '/EBS/20D/getDocumentsForReceiving/metadata',
-      apiUrl: `/EBS/20D/getDocumentsForReceiving/${this.organizationService.selectedOrgId}/%22null%22/%22Y%22`,
+      apiUrl: `/EBS/20D/getDocumentsForReceiving/${localStorage.getItem(
+        'selectedInvOrgId'
+      )}/%22null%22/%22Y%22`,
       type: API_TYPE.TRANSACTIONAL,
-      tableName: 'documentsForReceiving',
+      tableName: API_TABLE_NAMES.GET_DOCUMENTS_FOR_RECEIVING,
       apiStatus: API_STATUS.INITIAL,
       responseKey: 'Docs4Receiving',
       responsibility: API_RESPONSIBILITY.GET_DOCUMENTS_FOR_RECEIVING,
@@ -86,9 +101,11 @@ export class ResponsibilitiesService {
     {
       isCsv: true,
       metadataUrl: '',
-      apiUrl: `/EBS/22A/getLotsTableType/${this.organizationService.selectedOrgId}/%22%22`,
+      apiUrl: `/EBS/22A/getLotsTableType/${localStorage.getItem(
+        'selectedInvOrgId'
+      )}/%22%22`,
       type: API_TYPE.TRANSACTIONAL,
-      tableName: 'lotsTable',
+      tableName: API_TABLE_NAMES.GET_LOTS_TABLE_TYPE,
       apiStatus: API_STATUS.INITIAL,
       responseKey: '',
       responsibility: API_RESPONSIBILITY.GET_LOTS_TABLE_TYPE,
@@ -97,9 +114,11 @@ export class ResponsibilitiesService {
     {
       isCsv: true,
       metadataUrl: '',
-      apiUrl: `/EBS/22C/getOnHandWMSFilterTableType/${this.organizationService.selectedOrgId}/Central/''/S-16190`,
+      apiUrl: `/EBS/22C/getOnHandWMSFilterTableType/${localStorage.getItem(
+        'selectedInvOrgId'
+      )}/Central/''/S-16190`,
       type: API_TYPE.TRANSACTIONAL,
-      tableName: 'onHandWMSFilter',
+      tableName: API_TABLE_NAMES.GET_ON_HAND_WMS_FILTER_TABLE,
       apiStatus: API_STATUS.INITIAL,
       responseKey: '',
       responsibility: API_RESPONSIBILITY.GET_ON_HAND_WMS_FILTER_TABLE,
@@ -108,10 +127,11 @@ export class ResponsibilitiesService {
     {
       isCsv: false,
       metadataUrl: '/EBS/20D/getInventoryPeriods/metadata',
-      apiUrl: `/EBS/20D/getInventoryPeriods/${this.organizationService.selectedBusinessUnitId}/
-                ${this.organizationService.selectedOrgId}`,
+      apiUrl: `/EBS/20D/getInventoryPeriods/${localStorage.getItem(
+        'businessUnitId'
+      )}/${localStorage.getItem('selectedInvOrgId')}`,
       type: API_TYPE.CONFIG,
-      tableName: 'inventoryPeriods',
+      tableName: API_TABLE_NAMES.GET_INVENTORY_PERIODS,
       apiStatus: API_STATUS.INITIAL,
       responseKey: 'InventoryPeriods',
       responsibility: API_RESPONSIBILITY.GET_INVENTORY_PERIODS,
@@ -122,7 +142,7 @@ export class ResponsibilitiesService {
       metadataUrl: '/EBS/20D/getLocations/metadata',
       apiUrl: '/EBS/20D/getLocations/%22null%22/%22Y%22',
       type: API_TYPE.MASTER,
-      tableName: 'locations',
+      tableName: API_TABLE_NAMES.GET_LOCATIONS,
       apiStatus: API_STATUS.INITIAL,
       responseKey: 'LocationList',
       responsibility: API_RESPONSIBILITY.GET_LOCATIONS,
@@ -137,7 +157,7 @@ export class ResponsibilitiesService {
     try {
       let apisResponsibilities: string[] = [];
       let userLoginApiResponse: string[] = (
-        await this.sqliteService.getTableRows('responsibilities')
+        await this.sqliteService.getTableRows(API_TABLE_NAMES.LOGIN)
       ).map((responsibility) => {
         return responsibility.RESPONSIBILITY;
       });

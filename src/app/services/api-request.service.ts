@@ -11,7 +11,7 @@ export class ApiRequestService {
   request<T>(
     method: 'POST' | 'GET' | 'PUT' | 'DELETE',
     url: string,
-    body: any
+    body?: any
   ): Observable<T> {
     const fullUrl = `${environment.apiUrl}${url}`;
     return this.http

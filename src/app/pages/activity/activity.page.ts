@@ -1,4 +1,4 @@
-import {  Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { ButtonComponent } from 'src/app/components/common-components/button/button.component';
 import { API_STATUS, API_TYPE } from 'src/app/enums/api-details';
 import { Router } from '@angular/router';
+import { OrganisationService } from 'src/app/services/organisation.service';
 
 @Component({
   selector: 'app-activity',
@@ -33,6 +34,8 @@ export class ActivityPage implements OnInit {
   private responsibiltiesService: ResponsibilitiesService = inject(
     ResponsibilitiesService
   );
+  private organizationService: OrganisationService =
+    inject(OrganisationService);
   private router: Router = inject(Router);
 
   subscription: Subscription = new Subscription();

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { MasterApiService } from './master-api.service';
-import { ConfigApiService } from './config-api.service';
+import { ConfigApiService } from './api-type/config-api.service';
 import { ResponsibilitiesService } from './responsibilities.service';
 import { API_STATUS } from '../enums/api-details';
 import { TransactionApiService } from './transaction-api.service';

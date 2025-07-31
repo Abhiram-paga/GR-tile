@@ -1,0 +1,37 @@
+@use "../../../theme/abstracts/variables" as *;
+@use "../../../theme/abstracts/mixins" as *;
+
+.resposibility__name {
+  font-weight: bold;
+  font-size: 17px;
+  color: black;
+}
+
+.status-card {
+  text-align: center;
+
+  .circle-container {
+    @include flex-center;
+    margin: 10px 0;
+  }
+
+  .circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 6px solid #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: $main-color;
+    position: relative;
+    background-color: white;
+  }
+
+  .completed-text {
+    font-size: 14px;
+    margin-top: 8px;
+    color: #444;
+  }
+}

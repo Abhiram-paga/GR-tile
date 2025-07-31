@@ -1,6 +1,9 @@
-<cdk-virtual-scroll-viewport itemSize="80" class="virtualScroll">
+<cdk-virtual-scroll-viewport itemSize="auto" class="virtualScroll">
   <ng-container
-    *ngFor="let apiStatus of apiStatusList; trackBy: trackByResponsibility"
+    *cdkVirtualFor="
+      let apiStatus of apiStatusList;
+      trackBy: trackByResponsibility
+    "
   >
     <ion-card
       *ngIf="apiUserResponsibilties.includes(apiStatus.responsibility)"

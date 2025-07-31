@@ -1,20 +1,29 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
+<ion-menu contentId="main-content">
+  <ion-header class="HomeHeader">
+    <ion-title>Smith</ion-title>
+  </ion-header>
+  <ion-content color="light">
+    <ion-list [inset]="true">
+      <ion-item
+        *ngFor="let option of menuOptions"
+        (click)="handleMenuOptionClick(option.name)"
+        button
+      >
+        <ion-icon [name]="option.iconName"></ion-icon>
+        <p>{{option.name}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<div id="main-content">
+  <ion-header class="HomeHeader">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="HomeHeader__ordcode"
+      >{{organizationsService.selectedOrgCode}} Home</ion-title
+    >
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
-</ion-content>
+  <app-home-card />
+</div>

@@ -16,6 +16,7 @@ import { ModelLoaderService } from 'src/app/services/model-loader.service';
 import { SqliteService } from 'src/app/services/sqlite.service';
 import { OrganisationService } from 'src/app/services/organisation.service';
 import { Router } from '@angular/router';
+import { API_TABLE_NAMES } from 'src/app/enums/api-details';
 
 @Component({
   selector: 'app-login',
@@ -43,6 +44,9 @@ export class LoginPage {
       next: (res: IUser) => {
         this.handleFormSubmission(res);
       },
+      error: (err) => {
+        console.error(err);
+      },
     });
     this.subscriptions.add(subscription2);
   }
@@ -52,10 +56,11 @@ export class LoginPage {
     try {
       const subscription1 = this.userService.loginUser(user).subscribe({
         next: async (res: IUserLogin) => {
+
           await this.userService.handelLoginResponse(res);
 
           const responsibilities: IUserLoginRes[] =
-            await this.sqliteService.getTableRows('responsibilities');
+            await this.sqliteService.getTableRows(API_TABLE_NAMES.LOGIN);
           this.userService.userLoginResponseResponsibilities = responsibilities;
           const filteredResponsibilities = responsibilities.filter(
             (responsibility) => responsibility.DEFAULT_ORG_ID
@@ -63,32 +68,34 @@ export class LoginPage {
 
           const defaultOrgId: string =
             filteredResponsibilities[0].DEFAULT_ORG_ID;
-          this.organizationService.defaultOrgId = defaultOrgId;
+          localStorage.setItem('defaultOrgId', defaultOrgId);
+      
+          this.organizationService.defaultOrgId=defaultOrgId;
           const subscription3 = this.organizationService
             .getInventoryOrganizationsTable(defaultOrgId)
             .subscribe({
               next: async (res) => {
                 this.communicationService.manageCsvApiResponse(
                   res,
-                  'organizationTable'
+                  API_TABLE_NAMES.GET_ORGANIZATIONS
                 );
                 this.loaderService.hideLoader();
                 this.router.navigate(['/organizations']);
               },
               error: (err) => {
-                console.log(err);
+                console.error(err);
               },
             });
           this.subscriptions.add(subscription3);
         },
 
         error: (err) => {
-          console.log(err);
+          console.error(err);
         },
       });
       this.subscriptions.add(subscription1);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 

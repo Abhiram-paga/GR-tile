@@ -31,12 +31,16 @@ export class OrganizationListComponent implements OnInit {
     return org.InventoryOrgId_PK;
   }
 
-
-
-  changeSelectedOrg(selectedOrgId: string, businessUnitId: string) {
+  changeSelectedOrg(
+    selectedOrgId: string,
+    businessUnitId: string,
+    selectedOrgName: string
+  ) {
     this.selectedOrgId = selectedOrgId;
     this.oraganizationService.selectedOrgId = selectedOrgId;
     this.oraganizationService.selectedBusinessUnitId = businessUnitId;
+    localStorage.setItem('businessUnitId', businessUnitId);
+    this.oraganizationService.selectedOrgCode = selectedOrgName;
   }
 
   ngOnInit() {}

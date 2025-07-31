@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { ResponsibilitiesService } from './responsibilities.service';
-import { IApiDetails } from '../models/api.interface';
-import { API_TYPE } from '../enums/api-details';
-import { CommunicationService } from './communication.service';
+import { ResponsibilitiesService } from '../responsibilities.service';
+import { IApiDetails } from '../../models/api.interface';
+import { API_TYPE } from '../../enums/api-details';
+import { CommunicationService } from '../communication.service';
 
 @Injectable({
   providedIn: 'root',

@@ -13,6 +13,7 @@ import { ButtonComponent } from '../common-components/button/button.component';
 import { ToastService } from 'src/app/services/toast.service';
 import { CommunicationService } from 'src/app/services/communication.service';
 import { SqliteService } from 'src/app/services/sqlite.service';
+import { API_TABLE_NAMES } from 'src/app/enums/api-details';
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
@@ -53,6 +54,6 @@ export class LoginFormComponent {
   }
 
   handleDemoClick(){
-    this.sqliteService.getTableRows('responsibilities')
+    this.sqliteService.getTableRows(API_TABLE_NAMES.LOGIN)
   }
 }

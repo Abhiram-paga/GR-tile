@@ -1,7 +1,13 @@
 <ion-list lines="full">
   <ion-item
     *ngFor="let organization of organizationsList; trackBy: trackByOrg"
-    (click)="changeSelectedOrg(organization.InventoryOrgId_PK,organization.BusinessUnitId)"
+    (click)="
+      changeSelectedOrg(
+        organization.InventoryOrgId_PK,
+        organization.BusinessUnitId,
+        organization.InventoryOrgCode
+      )
+    "
   >
     <div class="iconContainer">
       <ion-icon

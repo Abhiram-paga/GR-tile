@@ -6,7 +6,7 @@
 
 <ion-content [fullscreen]="true">
   <app-refresher (onRefresherEmit)="onRefreher($event)">
-    <app-search-bar (searchInputChanged)="handleChangeOrgName($event)"/>
+    <app-search-bar (searchInputChanged)="handleChangeOrgName($event)" />
     <app-organization-list [organizationsList]="organizationsList" />
   </app-refresher>
 </ion-content>

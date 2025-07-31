@@ -1,0 +1,20 @@
+<ion-grid>
+  <ion-row
+    ><ion-col size="6" *ngFor="let responsibility of responsibilitiesList">
+      <ion-card class="status-card" button>
+        <ion-card-header>
+          <ion-card-title>{{responsibility.name}}</ion-card-title>
+          <ion-card-subtitle>{{ openDocs }} Open Docs</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="circle-container">
+            <div class="circle">
+              <span>{{ percent }}%</span>
+            </div>
+          </div>
+          <div class="completed-text">{{ completedDocs }} Completed</div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col></ion-row
+  >
+</ion-grid>

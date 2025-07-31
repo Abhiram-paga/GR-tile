@@ -22,5 +22,9 @@ export const routes: Routes = [
     path: 'activity',
     loadComponent: () => import('./pages/activity/activity.page').then( m => m.ActivityPage)
   },
+  {
+    path: 'receipt-purchase-orders-page',
+    loadComponent: () => import('./pages/goods-recript/receipt-purchase-orders-page/receipt-purchase-orders-page.page').then( m => m.ReceiptPurchaseOrdersPagePage)
+  },
 
 ];

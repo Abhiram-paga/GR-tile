@@ -1,3 +1,25 @@
+@use "../../theme/abstracts/variables" as *;
+@use "../../theme/abstracts/mixins" as *;
+
+.HomeHeader {
+  text-align: center;
+  background-color: $main-color;
+  --background: $main-color;
+  color: #ffffff;
+  padding: 20px;
+  @include flex-center;
+}
+
+ion-icon{
+  margin-right: 10px;
+  font-size: 25px;
+}
+
+.HomeHeader__ordcode{
+  font-weight: bold;
+}
+
+
 #container {
   text-align: center;
 
