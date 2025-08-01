@@ -20,7 +20,8 @@
         <ion-icon
           *ngIf="
             apiStatus.apiStatus === 'success' ||
-            apiStatus.apiStatus === 'failed'
+            apiStatus.apiStatus === 'failed' ||
+            apiStatus.apiStatus === 'no content'
           "
           [name]="
             apiStatus.apiStatus === 'success'

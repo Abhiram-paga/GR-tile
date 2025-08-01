@@ -56,7 +56,6 @@ export class LoginPage {
     try {
       const subscription1 = this.userService.loginUser(user).subscribe({
         next: async (res: IUserLogin) => {
-
           await this.userService.handelLoginResponse(res);
 
           const responsibilities: IUserLoginRes[] =
@@ -69,8 +68,8 @@ export class LoginPage {
           const defaultOrgId: string =
             filteredResponsibilities[0].DEFAULT_ORG_ID;
           localStorage.setItem('defaultOrgId', defaultOrgId);
-      
-          this.organizationService.defaultOrgId=defaultOrgId;
+
+          this.organizationService.defaultOrgId = defaultOrgId;
           const subscription3 = this.organizationService
             .getInventoryOrganizationsTable(defaultOrgId)
             .subscribe({
@@ -99,7 +98,7 @@ export class LoginPage {
     }
   }
 
-  ionViewDidLeave() {
+  ngOnDestroy() {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }

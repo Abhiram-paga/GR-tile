@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController} from '@ionic/angular';
 import { AlertController } from '@ionic/angular/standalone';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -64,4 +65,7 @@ export class ModelLoaderService {
       console.log(err);
     }
   }
+
+
+
 }

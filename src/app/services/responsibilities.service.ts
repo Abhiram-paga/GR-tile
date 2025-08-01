@@ -167,6 +167,7 @@ export class ResponsibilitiesService {
         apisResponsibilities.push(API_RESPONSIBILITY.GET_SUBINVENTORIES);
         apisResponsibilities.push(API_RESPONSIBILITY.GET_GL_PERIODS);
         apisResponsibilities.push(API_RESPONSIBILITY.GET_LOCATORS);
+        apisResponsibilities.push(API_RESPONSIBILITY.GET_LOCATIONS);
         apisResponsibilities.push(API_RESPONSIBILITY.GET_INVENTORY_PERIODS);
         apisResponsibilities.push(
           API_RESPONSIBILITY.GET_DOCUMENTS_FOR_RECEIVING

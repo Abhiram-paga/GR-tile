@@ -1,0 +1,13 @@
+<ion-header class="filterModalHeader">
+  <app-back-icon (backIconClicked)="handleBackIconClick()"/>
+  <ion-title>Select</ion-title>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-item
+    *ngFor="let option of filterOptions"
+    button
+    (click)="handleFilterOptionClick(option.docType)"
+  >
+    {{ option.docType }}
+  </ion-item>
+</ion-content>

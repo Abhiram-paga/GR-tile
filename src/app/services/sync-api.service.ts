@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { MasterApiService } from './master-api.service';
+import { MasterApiService } from './api-type/master-api.service';
 import { ConfigApiService } from './api-type/config-api.service';
 import { ResponsibilitiesService } from './responsibilities.service';
 import { API_STATUS } from '../enums/api-details';
-import { TransactionApiService } from './transaction-api.service';
+import { TransactionApiService } from './api-type/transaction-api.service';
 import { IApiDetails, IApiResponse } from '../models/api.interface';
 import { CommunicationService } from './communication.service';
 

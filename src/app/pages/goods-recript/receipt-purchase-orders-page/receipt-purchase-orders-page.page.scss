@@ -1,0 +1,15 @@
+@use "../../../../theme/abstracts/variables" as *;
+@use "../../../../theme/abstracts/mixins" as *;
+
+.Docs2ReceiveHeader {
+  text-align: center;
+  background-color: $main-color;
+  --background: $main-color;
+  color: #ffffff;
+  padding: 20px;
+  @include flex-center;
+  justify-content: space-between;
+  ion-icon{
+    font-size: 25px;
+  }
+}

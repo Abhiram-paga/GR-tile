@@ -1,0 +1,14 @@
+<ion-popover trigger="left-start" side="left" alignment="start">
+  <ng-template>
+    <ion-list>
+      <ion-item
+        *ngFor="let option of popOverOptionsList"
+        button
+        (click)="handlePopOverOptionClick(option.name)"
+      >
+        <ion-icon [name]="option.iconName"></ion-icon>
+        <p>{{ option.name }}</p>
+      </ion-item>
+    </ion-list>
+  </ng-template>
+</ion-popover>

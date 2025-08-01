@@ -1,0 +1,11 @@
+@use "../../../theme/abstracts/variables" as *;
+
+@use "../../../theme/abstracts/mixins" as *;
+
+.filterModalHeader {
+  background-color: $main-color;
+  --background: $main-color;
+  color: #ffffff;
+  padding: 20px;
+  @include flex-center;
+}

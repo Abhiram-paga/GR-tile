@@ -1,13 +1,14 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>receipt-purchase-orders-page</ion-title>
-  </ion-toolbar>
+<ion-header [translucent]="true" class="Docs2ReceiveHeader">
+  <app-back-icon (backIconClicked)="handleBackIconClick()" />
+  <ion-title>Docs 2 Receive</ion-title>
+  <ion-icon name="ellipsis-vertical" button id="left-start"></ion-icon>
+  <app-popover (popoverOptionClick)="handlePopoverOptionClick($event)" />
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">receipt-purchase-orders-page</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <app-refresher (onRefresherEmit)="handleRefresh($event)">
+    <ion-row>
+      <app-receipt-purchase-order-item [uniqueDocs]="filteredUniqueDocs"/>
+    </ion-row>
+  </app-refresher>
 </ion-content>

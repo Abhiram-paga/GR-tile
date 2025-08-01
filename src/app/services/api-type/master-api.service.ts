@@ -7,22 +7,22 @@ import { CommunicationService } from '../communication.service';
 @Injectable({
   providedIn: 'root',
 })
-export class ConfigApiService {
+export class MasterApiService {
   private responsibilitiesService: ResponsibilitiesService = inject(
     ResponsibilitiesService
   );
   private commonService: CommunicationService = inject(CommunicationService);
 
-  configApis: IApiDetails[] = [];
+  masterApis: IApiDetails[] = [];
 
   constructor() {
-    this.configApis = this.responsibilitiesService.ALL_API_LIST.filter(
-      (api) => api.type === API_TYPE.CONFIG
+    this.masterApis = this.responsibilitiesService.ALL_API_LIST.filter(
+      (api) => api.type === API_TYPE.MASTER
     );
   }
 
-  getConfigApiResponse() {
-    return this.configApis.map(async (api: IApiDetails) => {
+  getAllMaterApiResonses() {
+    return this.masterApis.map(async (api: IApiDetails) => {
       const apisResponsibilities =
         await this.responsibilitiesService.getResponsibilities();
       if (apisResponsibilities.includes(api.responsibility)) {

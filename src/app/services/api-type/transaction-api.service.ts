@@ -1,28 +1,28 @@
 import { inject, Injectable } from '@angular/core';
 import { ResponsibilitiesService } from '../responsibilities.service';
+import { CommunicationService } from '../communication.service';
 import { IApiDetails } from '../../models/api.interface';
 import { API_TYPE } from '../../enums/api-details';
-import { CommunicationService } from '../communication.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ConfigApiService {
+export class TransactionApiService {
   private responsibilitiesService: ResponsibilitiesService = inject(
     ResponsibilitiesService
   );
   private commonService: CommunicationService = inject(CommunicationService);
 
-  configApis: IApiDetails[] = [];
+  transactionsApi: IApiDetails[] = [];
 
   constructor() {
-    this.configApis = this.responsibilitiesService.ALL_API_LIST.filter(
-      (api) => api.type === API_TYPE.CONFIG
+    this.transactionsApi = this.responsibilitiesService.ALL_API_LIST.filter(
+      (api) => api.type === API_TYPE.TRANSACTIONAL
     );
   }
 
-  getConfigApiResponse() {
-    return this.configApis.map(async (api: IApiDetails) => {
+  getTransactionApiResponse() {
+    return this.transactionsApi.map(async (api: IApiDetails) => {
       const apisResponsibilities =
         await this.responsibilitiesService.getResponsibilities();
       if (apisResponsibilities.includes(api.responsibility)) {

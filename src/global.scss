@@ -1,5 +1,7 @@
-@forward './theme/main';
+@forward "./theme/main";
+@use "./theme/abstracts/variables" as *;
+@use "./theme/abstracts/mixins" as *;
 
 body {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
 }

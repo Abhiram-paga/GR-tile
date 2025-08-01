@@ -1,5 +1,5 @@
-export const HOME_PAGE={
-    MENU_OPTIONS:[
+export const HOME_PAGE = {
+  MENU_OPTIONS: [
     {
       name: 'Home',
       iconName: 'home',
@@ -16,5 +16,29 @@ export const HOME_PAGE={
       name: 'Logout + Clear Data',
       iconName: 'log-out',
     },
-  ]
-}
+  ],
+  POP_OVER_OPTIONS: [
+    {
+      name: 'Refresh',
+      iconName: 'refresh',
+    },
+    {
+      name: 'Reload',
+      iconName: 'reload',
+    },
+    {
+      name: 'Filter',
+      iconName: 'funnel',
+    },
+    {
+      name: 'Sort',
+      iconName: 'swap-vertical',
+    },
+  ],
+  FILTER_OPTIONS: [
+    { docType: 'ALL' },
+    { docType: 'ASN' },
+    { docType: 'PO' },
+    { docType: 'RMA' },
+  ],
+};
