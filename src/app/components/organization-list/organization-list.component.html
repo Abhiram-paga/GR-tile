@@ -1,4 +1,4 @@
-<ion-list lines="full">
+<ion-list lines="full" *ngIf="organizationsList.length > 0; else noItems">
   <ion-item
     *ngFor="let organization of organizationsList; trackBy: trackByOrg"
     (click)="
@@ -23,3 +23,7 @@
     </div>
   </ion-item>
 </ion-list>
+
+<ng-template #noItems>
+  <app-no-items />
+</ng-template>

@@ -1,3 +1,5 @@
+import { FILTER_SORT_OPTIONS } from '../enums/docs-4-receiving';
+
 export const HOME_PAGE = {
   MENU_OPTIONS: [
     {
@@ -40,5 +42,9 @@ export const HOME_PAGE = {
     { docType: 'ASN' },
     { docType: 'PO' },
     { docType: 'RMA' },
+  ],
+  FILTER_AND_SORT_OPTIONS: [
+    { sortType: FILTER_SORT_OPTIONS.LAST_UPDATE_FIRST },
+    { sortType: FILTER_SORT_OPTIONS.NEED_BY_DATE },
   ],
 };

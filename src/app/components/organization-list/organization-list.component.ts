@@ -6,12 +6,13 @@ import { CommonModule } from '@angular/common';
 import { addIcons } from 'ionicons';
 import { checkmarkCircle } from 'ionicons/icons';
 import { OrganisationService } from 'src/app/services/organisation.service';
+import { NoItemsComponent } from "../common-components/no-items/no-items.component";
 
 @Component({
   selector: 'app-organization-list',
   templateUrl: './organization-list.component.html',
   styleUrls: ['./organization-list.component.scss'],
-  imports: [IonicModule, ScrollingModule, CommonModule],
+  imports: [IonicModule, ScrollingModule, CommonModule, NoItemsComponent],
 })
 export class OrganizationListComponent implements OnInit {
   private oraganizationService: OrganisationService =

@@ -1,5 +1,5 @@
 export interface IuniqueDocs {
-  count: number;
+  Count: number;
   CustomerName: string;
   LastUpdateDate: string;
   PoNumber?: number;
@@ -8,4 +8,5 @@ export interface IuniqueDocs {
   VendorName: string;
   ASNNumber?: number;
   RMANumber?: number;
+  NeedByDate:string;
 }

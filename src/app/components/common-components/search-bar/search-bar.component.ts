@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 
 @Component({
@@ -9,6 +9,7 @@ import { IonicModule } from '@ionic/angular';
 })
 export class SearchBarComponent implements OnInit {
   @Output() searchInputChanged = new EventEmitter<any>();
+  @Input() searchTxt:string='';
 
   constructor() {}
 

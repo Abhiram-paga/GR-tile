@@ -1,0 +1,27 @@
+@use "../../../../theme/abstracts/variables" as *;
+@use "../../../../theme/abstracts/mixins" as *;
+
+.virtualScroll {
+  height: 80vh;
+}
+ion-row {
+  display: flex;
+  @include flex-center;
+}
+ion-col {
+  div {
+    background-color: $main-color;
+    padding: 5px;
+    color: white;
+    border-radius: 5px;
+    @include flex-center;
+    width: 100%;
+  }
+}
+.items__count {
+  text-align: center;
+  width: 100%;
+}
+.receiptCardBottomRow {
+  background-color: $color-light-blue;
+}

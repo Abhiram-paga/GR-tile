@@ -26,25 +26,19 @@ export class Docs4receivingService {
         );
       if (groupByColumn === DOC_TYPE.PO_NUMBER) {
         this.uniquePOlist = result;
-        this.AllUniqueDocsList = [
-          ...this.AllUniqueDocsList,
-          ...this.uniquePOlist,
-        ];
       } else if (groupByColumn === DOC_TYPE.ASN_NUMBER) {
         this.uniqueASNlist = result;
-        this.AllUniqueDocsList = [
-          ...this.AllUniqueDocsList,
-          ...this.uniqueASNlist,
-        ];
       } else if (groupByColumn === DOC_TYPE.RMA_NUMBER) {
         this.uniqueRMAlist = result;
-        this.AllUniqueDocsList = [
-          ...this.AllUniqueDocsList,
-          ...this.uniqueRMAlist,
-        ];
       }
+      this.AllUniqueDocsList = [
+        ...this.uniquePOlist,
+        ...this.uniqueASNlist,
+        ...this.uniqueRMAlist,
+      ];
     } catch (err) {
       console.log(err);
+      throw new Error(`Error in getting group by on ${groupByColumn}`)
     }
   }
 }

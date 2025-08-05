@@ -13,3 +13,12 @@
     font-size: 25px;
   }
 }
+
+.scanBarContainer{
+  @include flex-center;
+  width: 100%;
+}
+
+.heading__doc{
+  color: $main-color;
+}

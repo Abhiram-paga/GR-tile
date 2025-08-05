@@ -133,7 +133,15 @@ export class SqliteService {
     groupByColumn: string | number | boolean
   ) {
     try {
-      const groupByQuery = `SELECT ${groupByColumn},PoType,VendorName,CustomerName,LastUpdateDate,Requestor,COUNT(*) as Count FROM ${tableName} WHERE ${groupByColumn} IS NOT NULL AND ${groupByColumn} != '' GROUP BY ${groupByColumn} ORDER BY Count`;
+      const groupByQuery = `SELECT ${groupByColumn},PoType,VendorName,CustomerName,LastUpdateDate,NeedByDate,
+      Requestor,COUNT(*) as Count FROM ${tableName} 
+      WHERE ${groupByColumn} IS NOT NULL AND ${groupByColumn} != '' 
+      GROUP BY ${groupByColumn} ORDER BY   
+      SUBSTR(LastUpdateDate, 7, 4) || '-' || 
+      SUBSTR(LastUpdateDate, 4, 2) || '-' || 
+      SUBSTR(LastUpdateDate, 1, 2) || ' ' || 
+      SUBSTR(LastUpdateDate, 12)
+      DESC`;
       const result = await this.db?.query(groupByQuery);
       console.log(result);
       return result?.values ?? [];

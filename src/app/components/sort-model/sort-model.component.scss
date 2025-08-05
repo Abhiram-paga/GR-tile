@@ -1,0 +1,23 @@
+@use "../../../theme/abstracts/variables" as *;
+
+@use "../../../theme/abstracts/mixins" as *;
+
+.filterModalHeader {
+  background-color: $main-color;
+  --background: $main-color;
+  color: #ffffff;
+  padding: 20px;
+  @include flex-center;
+}
+
+.selected__sort__option {
+  background-color: $main-color;
+  color: #ffffff;
+  @include styled-sort-option;
+}
+
+.sort__option {
+  background-color: $color-light-blue;
+  color: $main-color;
+  @include styled-sort-option;
+}

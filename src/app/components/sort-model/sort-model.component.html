@@ -1,0 +1,33 @@
+<ion-header class="filterModalHeader">
+  <app-back-icon (backIconClicked)="handleBackIconClick()" />
+  <ion-title>Filter&Sort</ion-title>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-row>
+    <ion-col size="12">
+      <h4>Sort By</h4>
+    </ion-col>
+    <ion-col
+      size="5"
+      *ngFor="let sortOption of filterAndSortOptions"
+      button
+      (click)="handleSortOptionClick(sortOption.sortType)"
+      [ngClass]="{
+        selected__sort__option: sortOption.sortType === inpSelectedSortOption,
+        sort__option: sortOption.sortType !== inpSelectedSortOption
+      }"
+    >
+      {{ sortOption.sortType }}
+    </ion-col>
+  </ion-row>
+</ion-content>
+<ion-footer>
+  <ion-row>
+    <ion-col size="6">
+      <app-button label="Apply" class="confirm__button" (buttonClicked)="handleApplyClick()"/>
+    </ion-col>
+    <ion-col size="6">
+      <app-button label="Reset" class="confirm__button" (buttonClicked)="handleResetClick()"/>
+    </ion-col>
+  </ion-row>
+</ion-footer>
