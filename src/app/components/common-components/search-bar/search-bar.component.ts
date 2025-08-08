@@ -9,7 +9,7 @@ import { IonicModule } from '@ionic/angular';
 })
 export class SearchBarComponent implements OnInit {
   @Output() searchInputChanged = new EventEmitter<any>();
-  @Input() searchTxt:string='';
+  @Input() searchTxt: string = '';
 
   constructor() {}
 

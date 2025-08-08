@@ -1,0 +1,13 @@
+@use "../../../../theme/abstracts/mixins" as *;
+
+.itemDetailsHeader {
+  @include flex-center;
+}
+app-back-icon {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+app-home-icon {
+  font-size: 20px;
+}

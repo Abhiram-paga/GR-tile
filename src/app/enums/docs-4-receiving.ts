@@ -1,5 +1,5 @@
 export enum DOC_TYPE {
-  PO_NUMBER = 'PONumber',
+  PO_NUMBER = 'PoNumber',
   ASN_NUMBER = 'ASNNumber',
   RMA_NUMBER = 'RMANumber',
 }

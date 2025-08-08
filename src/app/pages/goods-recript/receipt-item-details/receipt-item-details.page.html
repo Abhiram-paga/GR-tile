@@ -1,0 +1,7 @@
+<app-header
+  [title]="`${selectedItemType} ${selectedItem[selectedItemType]}`"
+  class="itemDetailsHeader"
+/>
+<ion-content>
+  <app-slides [items]="selectedItemsList" [qtyValue]="qtyValue" [startIndex]="index" (changeQuantity)="handleEnteredQty($event)"/>
+</ion-content>

@@ -2,7 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { IuniqueDocs } from 'src/app/models/docs4receiving.interface';
+import {
+  IDocs4ReceivingItems,
+  IUniqueDocs,
+} from 'src/app/models/docs4receiving.interface';
 import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
@@ -13,8 +16,10 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class ScanBarComponent {
   private toastController: ToastService = inject(ToastService);
-  @Input() docsList: IuniqueDocs[] = [];
-  @Input() matchField: 'PoNumber' | 'ASNNumber' | 'RMANumber' = 'PoNumber';
+  @Input() docsList: IUniqueDocs[] | IDocs4ReceivingItems[] = [];
+  @Input() matchField: 'PoNumber' | 'ASNNumber' | 'RMANumber' | 'ItemNumber' =
+    'PoNumber';
+  @Input() placeHolderText: string = 'Scan Doc';
   @Output() docFound = new EventEmitter();
 
   searchInput: string = '';
@@ -26,7 +31,7 @@ export class ScanBarComponent {
     }
 
     this.timer = setTimeout(() => {
-      const matchedDoc = this.docsList.find((doc) => {
+      const matchedDoc = this.docsList.find((doc: any) => {
         const value = doc[this.matchField];
         return String(value) === this.searchInput;
       });
@@ -39,7 +44,7 @@ export class ScanBarComponent {
           'alert',
           'danger'
         );
-        this.searchInput='';
+        this.searchInput = '';
       }
     }, 1000);
   }

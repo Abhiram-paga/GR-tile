@@ -1,5 +1,5 @@
-import { Component, Input} from '@angular/core';
-import { IuniqueDocs } from 'src/app/models/docs4receiving.interface';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { IUniqueDocs } from 'src/app/models/docs4receiving.interface';
 import { IonicModule } from '@ionic/angular';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,8 @@ import { NoItemsComponent } from '../../common-components/no-items/no-items.comp
   imports: [IonicModule, ScrollingModule, CommonModule, NoItemsComponent],
 })
 export class ReceiptPurchaseOrderItemComponent {
-  @Input() uniqueDocs: IuniqueDocs[] = [];
+  @Input() uniqueDocs: IUniqueDocs[] = [];
+  @Output() clickedDoc = new EventEmitter();
 
   changeFormateOfDate(inputDate: string) {
     const [day, month, year] = inputDate.split(' ')[0].split('-');
@@ -34,4 +35,7 @@ export class ReceiptPurchaseOrderItemComponent {
     return newDate;
   }
 
+  handleDocClick(event: IUniqueDocs) {
+    this.clickedDoc.emit(event);
+  }
 }

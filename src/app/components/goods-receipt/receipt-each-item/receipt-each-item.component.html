@@ -1,0 +1,26 @@
+<ion-list>
+  <ion-item *ngFor="let item of itemsList; let i = index">
+    <ion-grid>
+      <ion-row class="itemDetailsRow">
+        <ion-col size="10">
+          <h5>{{ i + 1 }}.{{ item.ItemNumber }}</h5>
+          <span>{{ item.ItemDesc }}</span>
+          <span *ngIf="item.PoShipmentNumber"
+            >Shipment#: {{ item.PoShipmentNumber }}</span
+          >
+          <span *ngIf="item.DeliveryDate">{{ item.DeliveryDate }}</span>
+          <span
+            >Ordered Quantity: {{ item.QtyOrdered }} {{ item.ItemUom }}</span
+          >
+        </ion-col>
+        <ion-col size="2">
+          <ion-icon
+            name="chevron-forward"
+            button
+            (click)="handleForwardIconClick(i)"
+          ></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ion-list>

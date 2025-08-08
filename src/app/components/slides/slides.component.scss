@@ -1,0 +1,35 @@
+@use "../../../theme/abstracts/mixins" as *;
+@use "../../../theme/abstracts/variables" as *;
+.slideContent {
+  border: black 2px solid;
+  padding: 10px;
+  color: black;
+  margin: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  max-height: 70vh;
+  min-height: 70vh;
+  overflow-y: scroll;
+}
+
+div{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+ion-input{
+    border: $main-color 1px solid;
+}
+
+ion-icon{
+    font-size: 20px;
+}
+
+ion-input[type=number]{
+    border-radius: 10px;
+}
+

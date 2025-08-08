@@ -55,6 +55,7 @@ export class HomePage {
             DOC_TYPE.RMA_NUMBER
           )
         ).length;
+        console.log(this.openDocs)
     } catch (err) {
       console.error(err);
     }

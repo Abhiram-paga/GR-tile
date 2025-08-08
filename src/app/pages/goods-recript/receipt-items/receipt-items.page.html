@@ -1,0 +1,54 @@
+<app-header [title]="`Order# ${selectedDoc[seletedDocType]}`" />
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-grid>
+      <ion-row class="selectedDocRow">
+        <ion-col size="8">
+          <span>
+            {{seletedDocType==='PoNumber'? selectedDoc.PoType:
+            seletedDocType==='RMANumber'? 'RMA':'ASN'}}
+          </span>
+          <span class="span__heading">
+            {{seletedDocType==='PoNumber'? selectedDoc.VendorName:
+            seletedDocType==='RMANumber'? selectedDoc.CustomerName:`ASNVendor`}}
+          </span>
+        </ion-col>
+        <ion-col>{{selectedDoc.Count}} Items</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+          {{changeFormateOfDate(selectedDoc.LastUpdateDate)}}
+        </ion-col>
+        <ion-col size="4"> {{selectedDoc.Requestor}} </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <ion-grid>
+    <ion-row class="scanSearchRow">
+      <p class="item__para">Item#</p>
+      <app-scan-bar
+        [docsList]="selectedDocItems"
+        [matchField]="'ItemNumber'"
+        (docFound)="handleItemFound($event)"
+      />
+      <ion-icon
+        name="search"
+        button
+        (click)="handleSearchIconClick()"
+        class="search__icon"
+      ></ion-icon>
+    </ion-row>
+    <ion-row *ngIf="isSearchBarShown">
+      <app-search-bar
+        (searchInputChanged)="handleSearchInputChange($event)"
+        [searchTxt]="searchInputText"
+      />
+    </ion-row>
+    <app-receipt-each-item
+      [itemsList]="filteredDocItems"
+      (itemClicked)="handleSelectDocItem($event)"
+    />
+  </ion-grid>
+</ion-content>

@@ -6,6 +6,7 @@ import {
 } from '@capacitor-community/sqlite';
 import { IMetadata } from '../models/user.interface';
 import { API_TABLE_NAMES } from '../enums/api-details';
+import { DOC_TYPE } from '../enums/docs-4-receiving';
 
 @Injectable({
   providedIn: 'root',
@@ -128,9 +129,21 @@ export class SqliteService {
     }
   }
 
+  async getDocItems(docNumber: number, docColumn: string) {
+    try {
+      const getItemsQuery = `SELECT * FROM ${API_TABLE_NAMES.GET_DOCUMENTS_FOR_RECEIVING} 
+      where ${docColumn}=${docNumber}`;
+      const result = await this.db?.query(getItemsQuery);
+      return result?.values ?? [];
+    } catch (err) {
+      console.error(`Error in getting items of #${docNumber} doc`, err);
+      throw new Error('Error in getting items');
+    }
+  }
+
   async getRowsAfterGroupByFromDocs4Receive(
     tableName: API_TABLE_NAMES,
-    groupByColumn: string | number | boolean
+    groupByColumn: DOC_TYPE
   ) {
     try {
       const groupByQuery = `SELECT ${groupByColumn},PoType,VendorName,CustomerName,LastUpdateDate,NeedByDate,

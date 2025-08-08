@@ -1,23 +1,29 @@
 import { inject, Injectable } from '@angular/core';
 import { SqliteService } from './sqlite.service';
 import { API_TABLE_NAMES } from '../enums/api-details';
-import { IuniqueDocs } from '../models/docs4receiving.interface';
+import {
+  IDocs4ReceivingItems,
+  IUniqueDocs,
+} from '../models/docs4receiving.interface';
 import { DOC_TYPE } from '../enums/docs-4-receiving';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Docs4receivingService {
-  uniquePOlist: IuniqueDocs[] = [];
-  uniqueASNlist: IuniqueDocs[] = [];
-  uniqueRMAlist: IuniqueDocs[] = [];
-  AllUniqueDocsList: IuniqueDocs[] = [];
+  uniquePOlist: IUniqueDocs[] = [];
+  uniqueASNlist: IUniqueDocs[] = [];
+  uniqueRMAlist: IUniqueDocs[] = [];
+  AllUniqueDocsList: IUniqueDocs[] = [];
+
+  selectedItemsList: IDocs4ReceivingItems[] = [];
+  selectedDocType: DOC_TYPE = DOC_TYPE.PO_NUMBER;
 
   private sqliteService: SqliteService = inject(SqliteService);
 
   constructor() {}
 
-  async getUniqueDocslist(groupByColumn: string) {
+  async getUniqueDocslist(groupByColumn: DOC_TYPE) {
     try {
       const result =
         await this.sqliteService.getRowsAfterGroupByFromDocs4Receive(
@@ -38,7 +44,53 @@ export class Docs4receivingService {
       ];
     } catch (err) {
       console.log(err);
-      throw new Error(`Error in getting group by on ${groupByColumn}`)
+      throw new Error(`Error in getting group by on ${groupByColumn}`);
+    }
+  }
+
+  updateSelectedItemsAndDocType(
+    selectedItems: IDocs4ReceivingItems[],
+    selectedDocType: DOC_TYPE
+  ) {
+    this.selectedItemsList = selectedItems;
+    this.selectedDocType = selectedDocType;
+  }
+
+  async getPoItems(selectedId: number, selectedDocType: DOC_TYPE) {
+    try {
+      const res = await this.sqliteService.getDocItems(
+        selectedId,
+        selectedDocType
+      );
+      return res;
+    } catch (err) {
+      console.error(err);
+      throw new Error('Error in getting PO items from DB');
+    }
+  }
+
+  async getASNItems(selectedDoc: IUniqueDocs, selectedDocType: DOC_TYPE) {
+    try {
+      const res = await this.sqliteService.getDocItems(
+        selectedDoc.ASNNumber!,
+        selectedDocType
+      );
+      return res;
+    } catch (err) {
+      console.error(err);
+      throw new Error('Error in getting ASN items from DB');
+    }
+  }
+  async getRMAItems(selectedDoc: IUniqueDocs, selectedDocType: DOC_TYPE) {
+    try {
+      const res = await this.sqliteService.getDocItems(
+        selectedDoc.RMANumber!,
+        selectedDocType
+      );
+      return res;
+    } catch (err) {
+      console.error(err);
+      throw new Error('Error in getting RMA items from DB');
     }
   }
 }

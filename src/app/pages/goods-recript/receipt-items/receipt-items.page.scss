@@ -1,0 +1,49 @@
+@use "../../../../theme/abstracts/variables" as *;
+@use "../../../../theme/abstracts/mixins" as *;
+
+.Docs2ReceiveHeader {
+  @include flex-center;
+}
+
+app-back-icon {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+app-home-icon {
+  font-size: 20px;
+}
+
+ion-col {
+  color: black;
+}
+
+.selectedDocRow {
+  @include flex-center;
+}
+
+span {
+  font-size: 15px;
+  display: block;
+  color: black;
+}
+
+.span__heading {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.scanSearchRow {
+  @include flex-center;
+}
+
+.item__para {
+  color: $main-color;
+  margin-right: 10px;
+}
+
+.search__icon {
+  color: $main-color;
+  font-size: 20px;
+  margin-left: 10px;
+}

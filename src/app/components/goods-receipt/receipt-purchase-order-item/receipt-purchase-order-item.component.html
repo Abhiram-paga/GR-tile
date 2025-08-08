@@ -1,6 +1,6 @@
 <ng-container *ngIf="uniqueDocs.length > 0; else noItems">
   <cdk-virtual-scroll-viewport itemSize="150" class="virtualScroll">
-    <ion-card *cdkVirtualFor="let doc of uniqueDocs">
+    <ion-card *cdkVirtualFor="let doc of uniqueDocs" button (click)="handleDocClick(doc)">
       <ion-row>
         <ion-col size="4">
           <div *ngIf="doc.PoNumber">

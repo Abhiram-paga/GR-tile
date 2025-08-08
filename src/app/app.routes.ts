@@ -26,5 +26,13 @@ export const routes: Routes = [
     path: 'receipt-purchase-orders-page',
     loadComponent: () => import('./pages/goods-recript/receipt-purchase-orders-page/receipt-purchase-orders-page.page').then( m => m.ReceiptPurchaseOrdersPagePage)
   },
+  {
+    path: 'receipt-items',
+    loadComponent: () => import('./pages/goods-recript/receipt-items/receipt-items.page').then( m => m.ReceiptItemsPage)
+  },
+  {
+    path: 'receipt-item-details',
+    loadComponent: () => import('./pages/goods-recript/receipt-item-details/receipt-item-details.page').then( m => m.ReceiptItemDetailsPage)
+  },
 
 ];

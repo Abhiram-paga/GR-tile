@@ -5,3 +5,17 @@
 body {
   font-family: "Roboto Condensed", sans-serif;
 }
+
+ion-header{
+  text-align: center;
+  background-color: $main-color;
+  --background: $main-color;
+  color: #ffffff;
+  padding: 20px;
+  @include flex-center;
+  justify-content: space-between;
+}
+
+ion-card{
+   color: black;
+}

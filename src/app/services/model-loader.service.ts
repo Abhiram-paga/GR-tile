@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { LoadingController} from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular/standalone';
 
 @Injectable({
@@ -9,23 +9,6 @@ export class ModelLoaderService {
   private loading: HTMLIonLoadingElement | null = null;
   private loaderController: LoadingController = inject(LoadingController);
   private alertController: AlertController = inject(AlertController);
-
-  public alertButtons = [
-    {
-      text: 'CANCEL',
-      role: 'cancel',
-      handler: () => {
-        console.log('Alert canceled');
-      },
-    },
-    {
-      text: 'YES',
-      role: 'confirm',
-      handler: () => {
-        console.log('Alert confirmed');
-      },
-    },
-  ];
 
   async showLoader(): Promise<void> {
     try {
@@ -52,20 +35,33 @@ export class ModelLoaderService {
     }
   }
 
-  async presentAlert(header: string, message: string) {
+  async presentAlert(
+    header: string,
+    message: string
+  ): Promise<'cancel' | 'confirm'> {
     try {
       const alert = await this.alertController.create({
         header: header,
         message: message,
-        buttons: this.alertButtons,
+        buttons: [
+          {
+            text: 'CANCEL',
+            role: 'cancel',
+          },
+          {
+            text: 'YES',
+            role: 'confirm',
+          },
+        ],
       });
 
       await alert.present();
+
+      const { role } = await alert.onDidDismiss();
+      return role as 'cancel' | 'confirm';
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      throw new Error('Error in displaying alert')
     }
   }
-
-
-
 }

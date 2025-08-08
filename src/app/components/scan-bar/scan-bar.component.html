@@ -1,5 +1,5 @@
 <ion-input
-  placeholder="Scan Doc"
+  [placeholder]="placeHolderText"
   (ionInput)="handleInputChange()"
   [(ngModel)]="searchInput"
   [value]="searchInput"

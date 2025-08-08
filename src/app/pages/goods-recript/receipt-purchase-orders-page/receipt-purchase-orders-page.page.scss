@@ -9,16 +9,32 @@
   padding: 20px;
   @include flex-center;
   justify-content: space-between;
-  ion-icon{
-    font-size: 25px;
-  }
 }
 
-.scanBarContainer{
+ion-icon {
+  font-size: 25px;
+}
+.scanBarContainer {
   @include flex-center;
   width: 100%;
 }
-
-.heading__doc{
+.search__icon{
   color: $main-color;
 }
+
+.heading__doc {
+  color: $main-color;
+  margin-right: 10px;
+}
+.sortOptionCard {
+  padding: 10px;
+  @include flex-center;
+  justify-content: space-between;
+}
+.option__container {
+  background-color: $main-color;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 10px;
+}
+

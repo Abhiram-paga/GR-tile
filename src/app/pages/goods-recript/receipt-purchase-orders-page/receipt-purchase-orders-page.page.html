@@ -7,7 +7,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="scanBarContainer">
-    <h4 class="heading__doc">Doc#</h4>
+    <h4 class="heading__doc">Doc# </h4>
     <app-scan-bar
       [matchField]="(selectedFilterOption==='ALL' || selectedFilterOption==='PO') ?
     'PoNumber': selectedFilterOption==='ASN'?
@@ -15,14 +15,21 @@
       [docsList]="filteredUniqueDocs"
       (docFound)="handleDocFound($event)"
     />
-    </div>
+    <ion-icon name="search" (click)="handleSearchIconClick()" class="search__icon"></ion-icon>
+  </div>
   <app-search-bar
     (searchInputChanged)="handleSearchInputChange($event)"
     [searchTxt]="scanSearchText"
+    *ngIf="isSearchBarShown"
   />
+  <ion-card class="sortOptionCard">
+    <div class="option__container">{{selectedSortOption}}</div>
+    <ion-icon button *ngIf="isAscOrder" name="arrow-down" (click)="handleArrowClick()"></ion-icon>
+    <ion-icon button *ngIf="!isAscOrder" name="arrow-up" (click)="handleArrowClick()"></ion-icon>
+  </ion-card>
   <app-refresher (onRefresherEmit)="handleRefresh($event)">
     <ion-grid>
-      <app-receipt-purchase-order-item [uniqueDocs]="filteredUniqueDocs" />
+      <app-receipt-purchase-order-item [uniqueDocs]="filteredUniqueDocs" (clickedDoc)="handleDocClick($event)"/>
     </ion-grid>
   </app-refresher>
 </ion-content>

@@ -5,7 +5,7 @@ import { IonicModule, NavController, ModalController } from '@ionic/angular';
 import { Docs4receivingService } from 'src/app/services/docs4receiving.service';
 import { DOC_TYPE, FILTER_SORT_OPTIONS } from 'src/app/enums/docs-4-receiving';
 import { addIcons } from 'ionicons';
-import { ellipsisVertical } from 'ionicons/icons';
+import { arrowDown, arrowUp, ellipsisVertical, search } from 'ionicons/icons';
 import { BackIconComponent } from 'src/app/components/common-components/back-icon/back-icon.component';
 import { PopoverComponent } from 'src/app/components/popover/popover.component';
 import { IApiDetails, IApiResponse } from 'src/app/models/api.interface';
@@ -15,7 +15,7 @@ import { CommunicationService } from 'src/app/services/communication.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { HOME_PAGE } from 'src/app/constants/home-page';
 import { FilterModelComponent } from 'src/app/components/filter-model/filter-model.component';
-import { IuniqueDocs } from 'src/app/models/docs4receiving.interface';
+import { IUniqueDocs } from 'src/app/models/docs4receiving.interface';
 import { RefresherComponent } from 'src/app/components/refresher/refresher.component';
 import { RefresherCustomEvent } from '@ionic/angular/standalone';
 import { ReceiptPurchaseOrderItemComponent } from 'src/app/components/goods-receipt/receipt-purchase-order-item/receipt-purchase-order-item.component';
@@ -34,7 +34,6 @@ import { ScanBarComponent } from 'src/app/components/scan-bar/scan-bar.component
     FormsModule,
     BackIconComponent,
     PopoverComponent,
-    FilterModelComponent,
     RefresherComponent,
     RefresherComponent,
     ReceiptPurchaseOrderItemComponent,
@@ -59,12 +58,14 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
   selectedFilterOption: string = 'ALL';
   filterAndSortOptions: { sortType: FILTER_SORT_OPTIONS }[] = [];
   scanSearchText: string = '';
+  isAscOrder: boolean = false;
+  isSearchBarShown: boolean = false;
 
   constructor() {
-    addIcons({ ellipsisVertical });
+    addIcons({ ellipsisVertical, arrowUp, arrowDown,search });
   }
 
-  filteredUniqueDocs: IuniqueDocs[] = [];
+  filteredUniqueDocs: IUniqueDocs[] = [];
 
   async ngOnInit() {
     this.filterAndSortOptions = HOME_PAGE.FILTER_AND_SORT_OPTIONS;
@@ -79,6 +80,19 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  handleSearchIconClick() {
+    this.isSearchBarShown = !this.isSearchBarShown;
+  }
+
+  handleArrowClick() {
+    this.isAscOrder = !this.isAscOrder;
+    this.filteredUniqueDocs = this.sortDocs(
+      this.filteredUniqueDocs,
+      this.selectedSortOption,
+      this.isAscOrder
+    );
   }
 
   applyFilterAndSort() {
@@ -105,8 +119,8 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
   }
 
   sortDocs(
-    docs: IuniqueDocs[],
-    sortColumn: keyof IuniqueDocs,
+    docs: IUniqueDocs[],
+    sortColumn: keyof IUniqueDocs,
     isSortAsc: boolean = false
   ) {
     const months = {
@@ -321,13 +335,16 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
         component: SortModelComponent,
         componentProps: {
           filterAndSortOptions: this.filterAndSortOptions,
-          selectedSortOption: this.selectedSortOption,
+          inpSelectedSortOption: this.selectedSortOption,
         },
       });
       await modal.present();
 
       const { data } = await modal.onDidDismiss();
-      this.selectedSortOption = data;
+      if (data) {
+        this.selectedSortOption = data;
+      }
+
       this.applyFilterAndSort();
     } catch (err) {
       console.error(`Error in showing Sort Modal`, err);
@@ -344,6 +361,10 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
         console.error(err);
         event.target.complete();
       });
+  }
+
+  handleDocClick(doc: IUniqueDocs) {
+    this.navCtrl.navigateForward('/receipt-items', { state: { doc } });
   }
 
   handleBackIconClick() {
