@@ -33,7 +33,12 @@
         <ion-label>
           <div>
             <ion-col size="3">COO:</ion-col>
-            <ion-col><ion-input placeholder="Enter COO"></ion-input></ion-col>
+            <ion-col
+              ><ion-input
+                placeholder="Enter COO"
+                (ionInput)="handleChangeCOO($event)"
+              ></ion-input
+            ></ion-col>
           </div>
         </ion-label>
       </ion-item>
@@ -43,10 +48,18 @@
             <div>
               <ion-col size="3">SubInv: </ion-col>
               <ion-col size="7"
-                ><app-scan-bar placeHolderText="Scan SubInv"
+                ><app-scan-bar
+                  [docsList]="subInventories"
+                  matchField="SubInventoryCode"
+                  placeHolderText="Scan SubInv"
+                  [value]="selectedSubInventory"
               /></ion-col>
               <ion-col>
-                <ion-icon name="chevron-forward" button></ion-icon>
+                <ion-icon
+                  name="chevron-forward"
+                  button
+                  (click)="handelSubInvClick()"
+                ></ion-icon>
               </ion-col>
             </div>
           </ion-row>
@@ -58,10 +71,17 @@
             <div>
               <ion-col size="3">Loc: </ion-col>
               <ion-col size="7"
-                ><app-scan-bar placeHolderText="Scan Locator"
+                ><app-scan-bar
+                  placeHolderText="Scan Locator"
+                  [value]="selectedLocator"
               /></ion-col>
               <ion-col>
-                <ion-icon name="chevron-forward" button></ion-icon>
+                <ion-icon
+                  *ngIf="selectedSubInventory"
+                  name="chevron-forward"
+                  button
+                  (click)="handleLocatorsClick()"
+                ></ion-icon>
               </ion-col>
             </div>
           </ion-row>
@@ -73,9 +93,14 @@
             <div>
               <ion-col size="5">Qty Receiving:</ion-col>
               <ion-col size="3">
-                <ion-input type="number" placeholder="QTY" [value]="qtyValue" (ionBlur)="handleQuantityChange($event)"></ion-input>
+                <ion-input
+                  type="number"
+                  placeholder="QTY"
+                  [value]="qtyValue"
+                  (ionBlur)="handleQuantityChange($event)"
+                ></ion-input>
               </ion-col>
-              <ion-col size="2"> </ion-col>
+              <ion-col size="2">{{ selectedUom }} </ion-col>
               <ion-col>
                 <ion-icon name="chevron-forward" button></ion-icon>
               </ion-col>

@@ -3,5 +3,19 @@
   class="itemDetailsHeader"
 />
 <ion-content>
-  <app-slides [items]="selectedItemsList" [qtyValue]="qtyValue" [startIndex]="index" (changeQuantity)="handleEnteredQty($event)"/>
+  <app-slides
+    [selectedLocator]="selectedLocator"
+    [subInventories]="subInventoryList"
+    [selectedSubInventory]="selectedSubInventory"
+    [selectedUom]="selectedUom"
+    [items]="selectedItemsList"
+    [qtyValue]="qtyValue"
+    [startIndex]="index"
+    (changeQuantity)="handleEnteredQty($event)"
+    (subInvClick)="handleSubInvClick()"
+    (locClick)="handleLocClick()"
+    (slideChange)="handleChangedItem($event)"
+    (changeCOO)="handleChangeCOO($event)"
+  />
+  <app-button class="confirm__button" label="RECEIVE" (buttonClicked)="handleReceiveButtonClick()"/>
 </ion-content>

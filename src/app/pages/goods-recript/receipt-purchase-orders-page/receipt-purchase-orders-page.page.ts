@@ -62,7 +62,7 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
   isSearchBarShown: boolean = false;
 
   constructor() {
-    addIcons({ ellipsisVertical, arrowUp, arrowDown,search });
+    addIcons({ ellipsisVertical, arrowUp, arrowDown, search });
   }
 
   filteredUniqueDocs: IUniqueDocs[] = [];
@@ -214,6 +214,10 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
   handleDocFound(scanSearchText: string) {
     this.handleSearchInputChange(scanSearchText);
     this.scanSearchText = scanSearchText;
+
+    this.navCtrl.navigateForward('/receipt-items', {
+      state: { doc: this.filteredUniqueDocs[0] },
+    });
   }
 
   handlePopoverOptionClick(name: string) {

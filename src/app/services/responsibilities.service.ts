@@ -157,7 +157,9 @@ export class ResponsibilitiesService {
     try {
       let apisResponsibilities: string[] = [];
       let userLoginApiResponse: string[] = (
-        await this.sqliteService.getTableRows(API_TABLE_NAMES.LOGIN)
+        await this.sqliteService.getTableRows<{ RESPONSIBILITY: string }>(
+          API_TABLE_NAMES.LOGIN
+        )
       ).map((responsibility) => {
         return responsibility.RESPONSIBILITY;
       });
@@ -173,9 +175,6 @@ export class ResponsibilitiesService {
           API_RESPONSIBILITY.GET_DOCUMENTS_FOR_RECEIVING
         );
         apisResponsibilities.push(API_RESPONSIBILITY.GET_LOTS_TABLE_TYPE);
-        apisResponsibilities.push(
-          API_RESPONSIBILITY.GET_ON_HAND_WMS_FILTER_TABLE
-        );
       }
 
       return apisResponsibilities;

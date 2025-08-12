@@ -6,6 +6,7 @@ import {
   IDocs4ReceivingItems,
   IUniqueDocs,
 } from 'src/app/models/docs4receiving.interface';
+import { ISubInventory } from 'src/app/models/subinventories.interface';
 import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
@@ -16,13 +17,19 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class ScanBarComponent {
   private toastController: ToastService = inject(ToastService);
-  @Input() docsList: IUniqueDocs[] | IDocs4ReceivingItems[] = [];
-  @Input() matchField: 'PoNumber' | 'ASNNumber' | 'RMANumber' | 'ItemNumber' =
-    'PoNumber';
+  @Input() docsList: IUniqueDocs[] | IDocs4ReceivingItems[] | ISubInventory[] =
+    [];
+  @Input() matchField:
+    | 'PoNumber'
+    | 'ASNNumber'
+    | 'RMANumber'
+    | 'ItemNumber'
+    | 'SubInventoryCode' = 'PoNumber';
   @Input() placeHolderText: string = 'Scan Doc';
+  @Input() value: string | number = '';
   @Output() docFound = new EventEmitter();
 
-  searchInput: string = '';
+  searchInput: string | number = '';
   timer: any;
 
   handleInputChange() {
@@ -38,6 +45,7 @@ export class ScanBarComponent {
       if (matchedDoc) {
         this.docFound.emit(this.searchInput);
         this.searchInput = '';
+        this.value = '';
       } else {
         this.toastController.showToast(
           `Invalid #${this.searchInput}`,
@@ -45,6 +53,7 @@ export class ScanBarComponent {
           'danger'
         );
         this.searchInput = '';
+        this.value = '';
       }
     }, 1000);
   }

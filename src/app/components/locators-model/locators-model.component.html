@@ -1,0 +1,28 @@
+<ion-header class="filterModalHeader">
+  <app-back-icon (backIconClicked)="handleBackIconClick()" />
+  <ion-title>Locators</ion-title>
+</ion-header>
+<ion-content class="ion-padding">
+  <app-search-bar (searchInputChanged)="handleSearchInputChanged($event)" />
+  <ng-container *ngIf="filteredLocatorsList.length > 0; else noItem">
+    <ion-item
+      lines="full"
+      *ngFor="let locator of filteredLocatorsList"
+      button
+      (click)="handleFilterOptionClick(locator.Locator_PK)"
+    >
+      <ion-row>
+        <ion-col size="12">
+          <p>{{ locator.Locator_PK }}</p>
+        </ion-col>
+        <ion-col size="12" class="onHandMaxCapacityCol">
+          <span>OnHand: {{ locator.OnhandQty }} {{ locator.Uom }}</span>
+          <span>Max Capacity: {{ locator.MAXCapacity }}</span>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </ng-container>
+  <ng-template #noItem>
+    <app-no-items [isDataFetched]="isDataFetched"/>
+  </ng-template>
+</ion-content>

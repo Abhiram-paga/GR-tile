@@ -9,16 +9,14 @@ import {
 } from 'src/app/models/docs4receiving.interface';
 import { SqliteService } from 'src/app/services/sqlite.service';
 import { DOC_TYPE } from 'src/app/enums/docs-4-receiving';
-import { BackIconComponent } from 'src/app/components/common-components/back-icon/back-icon.component';
 import { addIcons } from 'ionicons';
 import { home, search } from 'ionicons/icons';
-import { HomeIconComponent } from 'src/app/components/common-components/home-icon/home-icon.component';
 import { ScanBarComponent } from 'src/app/components/scan-bar/scan-bar.component';
 import { SearchBarComponent } from 'src/app/components/common-components/search-bar/search-bar.component';
 import { SearchFilterPipe } from 'src/app/pipes/search-filter.pipe';
 import { ReceiptEachItemComponent } from 'src/app/components/goods-receipt/receipt-each-item/receipt-each-item.component';
 import { Docs4receivingService } from 'src/app/services/docs4receiving.service';
-import { HeaderComponent } from "src/app/components/common-components/header/header.component";
+import { HeaderComponent } from 'src/app/components/common-components/header/header.component';
 
 @Component({
   selector: 'app-receipt-items',
@@ -32,8 +30,8 @@ import { HeaderComponent } from "src/app/components/common-components/header/hea
     ScanBarComponent,
     SearchBarComponent,
     ReceiptEachItemComponent,
-    HeaderComponent
-],
+    HeaderComponent,
+  ],
   providers: [SearchFilterPipe],
 })
 export class ReceiptItemsPage {
@@ -58,7 +56,7 @@ export class ReceiptItemsPage {
 
   seletedDocType: DOC_TYPE = DOC_TYPE.PO_NUMBER;
   selectedDocItems: IDocs4ReceivingItems[] = [];
-  filteredDocItems: IDocs4ReceivingItems[] = [];
+  filteredDocItems: any = [];
   isSearchBarShown: boolean = false;
   searchInputText: string = '';
 
@@ -98,16 +96,15 @@ export class ReceiptItemsPage {
       this.seletedDocType
     );
     this.filteredDocItems = this.selectedDocItems;
-    console.log(this.filteredDocItems);
   }
 
-  handleSelectDocItem(index:number) {
+  handleSelectDocItem(index: number) {
     this.navController.navigateForward('/receipt-item-details', {
-      state: { 
-        seletedDocItems:this.selectedDocItems,
-        index:index,
-        selectedItemType:this.seletedDocType
-       },
+      state: {
+        seletedDocItems: this.selectedDocItems,
+        index: index,
+        selectedItemType: this.seletedDocType,
+      },
     });
   }
 
@@ -125,6 +122,16 @@ export class ReceiptItemsPage {
   handleItemFound(scanSearchText: string) {
     this.searchInputText = scanSearchText;
     this.handleSearchInputChange(scanSearchText);
+    console.log(this.selectedDocItems);
+    this.navController.navigateForward('/receipt-item-details', {
+      state: {
+        seletedDocItems: this.selectedDocItems,
+        index: this.selectedDocItems.findIndex(
+          (doc) => doc.ItemNumber == scanSearchText
+        ),
+        selectedItemType: this.seletedDocType,
+      },
+    });
   }
 
   handleBackIconClick() {

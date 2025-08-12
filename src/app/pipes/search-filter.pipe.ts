@@ -1,18 +1,23 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IDocs4ReceivingItems } from '../models/docs4receiving.interface';
 
 @Pipe({
   name: 'searchFilter',
 })
 export class SearchFilterPipe implements PipeTransform {
-  transform(
-    allItems: IDocs4ReceivingItems[],
-    searchText: string
-  ): IDocs4ReceivingItems[] {
-    return allItems.filter(
-      (items) =>
-        items.ItemNumber.toLowerCase().includes(searchText.toLowerCase()) ||
-        items.ItemDesc.toLowerCase().includes(searchText.toLowerCase())
-    );
+  transform(allItems: any[] = [], searchText: string = ''): any[] {
+    if (!allItems.length || !searchText.trim()) {
+      return allItems;
+    }
+
+    const lowerSearch = searchText.toLowerCase();
+
+    return allItems.filter((item) => {
+      return (
+        item?.ItemNumber?.toLowerCase().includes(lowerSearch) ||
+        item?.ItemDesc?.toLowerCase().includes(lowerSearch) ||
+        String(item?.SubInventoryCode).toLowerCase().includes(lowerSearch) ||
+        item?.Locator_PK?.toLowerCase().includes(lowerSearch)
+      );
+    });
   }
 }

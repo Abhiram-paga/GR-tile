@@ -7,6 +7,7 @@ import {
 import { IMetadata } from '../models/user.interface';
 import { API_TABLE_NAMES } from '../enums/api-details';
 import { DOC_TYPE } from '../enums/docs-4-receiving';
+import { JOINS } from '../enums/query';
 
 @Injectable({
   providedIn: 'root',
@@ -81,16 +82,37 @@ export class SqliteService {
     }
   }
 
-  async getTableRows(tableName: API_TABLE_NAMES) {
+  async getTableRows<T>(tableName: API_TABLE_NAMES): Promise<T[]> {
     try {
       const rows = await this.db?.query(`SELECT * FROM ${tableName}`);
-      if (!rows || !rows.values) {
+      if (!rows) {
         console.log(`No rows returned for table: ${tableName}`);
         return [];
       }
 
       console.log(`Rows from table '${tableName}':`, rows.values);
-      return rows.values;
+      return rows.values as T[];
+    } catch (err) {
+      console.error(err);
+      throw Error('Error in getting table rows');
+    }
+  }
+
+  async getTableRowsWithOrderBy<T>(
+    tableName: API_TABLE_NAMES,
+    orderByColumn: string
+  ) {
+    try {
+      const rows = await this.db?.query(
+        `SELECT * FROM ${tableName} ORDER BY ${orderByColumn}`
+      );
+      if (!rows) {
+        console.log(`No rows returned for table: ${tableName}`);
+        return [];
+      }
+
+      console.log(`Rows from table '${tableName}':`, rows.values);
+      return rows.values as T[];
     } catch (err) {
       console.error(err);
       throw Error('Error in getting table rows');
@@ -138,6 +160,27 @@ export class SqliteService {
     } catch (err) {
       console.error(`Error in getting items of #${docNumber} doc`, err);
       throw new Error('Error in getting items');
+    }
+  }
+
+  async getJoinedRowsOfTwoTables(
+    table1: API_TABLE_NAMES,
+    table2: API_TABLE_NAMES,
+    joinName: JOINS,
+    table1Column: string,
+    table2Column: string
+  ) {
+    try {
+      const query = `SELECT * FROM ${table1} 
+      ${joinName} 
+      ${table2}
+       ON ${table1}.${table1Column}=${table2}.${table2Column} GROUP BY ${table1Column}`;
+
+      const result = await this.db?.query(query);
+      return result?.values ?? [];
+    } catch (err) {
+      console.error(err);
+      throw new Error(`Error in joining ${table1} and ${table2} table`);
     }
   }
 

@@ -13,6 +13,7 @@ import { IDocs4ReceivingItems } from 'src/app/models/docs4receiving.interface';
 import { ScanBarComponent } from '../scan-bar/scan-bar.component';
 import { addIcons } from 'ionicons';
 import { chevronForward } from 'ionicons/icons';
+import { ISubInventory } from 'src/app/models/subinventories.interface';
 
 @Component({
   selector: 'app-slides',
@@ -24,9 +25,16 @@ import { chevronForward } from 'ionicons/icons';
 export class SlidesComponent {
   @Input() items: IDocs4ReceivingItems[] = [];
   @Input() startIndex: number = 0;
-  @Input() qtyValue:number|null=null;
+  @Input() qtyValue: number | null | string = null;
+  @Input() selectedSubInventory: string = '';
+  @Input() selectedLocator: string = '';
+  @Input() selectedUom: string = '';
+  @Input() subInventories: ISubInventory[] = [];
   @Output() changeQuantity = new EventEmitter();
-
+  @Output() subInvClick = new EventEmitter();
+  @Output() locClick = new EventEmitter();
+  @Output() changeCOO = new EventEmitter();
+  @Output() slideChange = new EventEmitter<IDocs4ReceivingItems>();
 
   @ViewChild('swiperEl', { static: false }) swiperEl!: ElementRef;
 
@@ -39,10 +47,30 @@ export class SlidesComponent {
     const swiperInstance = swiperElement.swiper;
     if (swiperInstance) {
       swiperInstance.slideTo(this.startIndex);
+
+      swiperInstance.on('slideChange', () => {
+        const activeIndex = swiperInstance.activeIndex;
+        const currentItem: IDocs4ReceivingItems = this.items[activeIndex];
+        if (currentItem) {
+          this.slideChange.emit(currentItem);
+        }
+      });
     }
+  }
+
+  handleChangeCOO(event: any) {
+    this.changeCOO.emit(event.target.value);
   }
 
   handleQuantityChange(event: InputCustomEvent<FocusEvent>) {
     this.changeQuantity.emit(event?.target?.value);
+  }
+
+  handelSubInvClick() {
+    this.subInvClick.emit();
+  }
+
+  handleLocatorsClick() {
+    this.locClick.emit();
   }
 }
