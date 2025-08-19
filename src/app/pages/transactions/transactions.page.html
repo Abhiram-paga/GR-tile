@@ -1,0 +1,10 @@
+<app-header
+  title="Trans History"
+  [showSyncIcon]="true"
+  (clickedSyncIcon)="handleSyncIconClick()"
+/>
+
+<ion-content [fullscreen]="true">
+  <app-search-bar (searchInputChanged)="handleSearchTextChange($event)" />
+  <app-transactions-card [transactionsList]="filteredTransactionList" />
+</ion-content>

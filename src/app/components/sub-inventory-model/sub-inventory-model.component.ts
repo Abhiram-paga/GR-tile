@@ -44,7 +44,7 @@ export class SubInventoryModelComponent {
     );
   }
 
-  handleFilterOptionClick(subInventoryCode: string) {
+  handleFilterOptionClick(subInventoryCode: string, index: number) {
     this.modalController.dismiss(subInventoryCode);
   }
 }

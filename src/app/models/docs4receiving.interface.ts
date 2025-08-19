@@ -172,4 +172,5 @@ export interface IDocs4ReceivingItems {
   VendorSiteId: string;
   WayBillAirBillNumber: string;
   ASNNumber: number;
+  qtyValue?:number|null;
 }

@@ -15,7 +15,7 @@ export interface ISubInventory {
   SubinventoryTypeDesc: string;
 }
 
-export interface ILocator {
+export interface IWMSResponse {
   ItemNumber_PK: string;
   Locator_PK: string;
   SubInventoryCode_PK: string;
@@ -27,6 +27,51 @@ export interface ILocator {
   Uom: string;
   OnhandQty: string;
   ItemId: string;
+}
+
+export interface ILocatorsTable {
+  InventoryOrgId_PK: string;
+  SubInventoryCode: string;
+  Locator: string;
+  LocatorDesc: string;
+  LocatorTypeCode: string;
+  LocatorTypeDesc: string;
+  LocatorAlias: string;
+  LastUpdateDate: string;
+  InventoryLocationType: string;
+  Flag: string;
+  MAXCapacity: string;
+}
+
+export interface IOnHandLocators {
+  Flag: string;
+  InventoryLocationType: string;
+  InventoryOrgCode: string;
+  InventoryOrgId: string;
+  InventoryOrgId_PK: string;
+  InventoryOrgName: string;
+  ItemDesc: string;
+  ItemId_PK: string;
+  ItemNumber: string;
+  ItemRevision: string;
+  LastUpdateDate: string;
+  Locator: string;
+  LocatorAlias: string;
+  LocatorDesc: string;
+  LocatorId_PK: string;
+  LocatorTypeCode: string;
+  LocatorTypeDesc: string;
+  Lot_PK: string;
+  LpnId_PK: string;
+  LpnNumber: string;
+  MAXCapacity: string;
+  OnhandQty: string;
+  PrimaryUom: string;
+  RowId: string;
+  SecondaryUom: string;
+  SerialNumber_PK: string;
+  SubInventoryCode: string;
+  SubInventoryCode_PK: string;
 }
 
 export interface ILocatorWMSFilter {

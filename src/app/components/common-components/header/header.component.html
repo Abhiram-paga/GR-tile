@@ -1,5 +1,12 @@
 <ion-header [translucent]="true" [class]="class">
-  <app-back-icon (backIconClicked)="handleBackIconClick()"/>
-  <app-home-icon (homeIconClicked)="handleHomeIconClick()"/>
+  <app-back-icon (backIconClicked)="handleBackIconClick()" />
+  <app-home-icon (homeIconClicked)="handleHomeIconClick()" />
   <ion-title>{{ title }}</ion-title>
+  <ion-icon
+    *ngIf="showSyncIcon"
+    name="sync-outline"
+    button
+    class="sync__icon"
+    (click)="handleSyncIconClick()"
+  ></ion-icon>
 </ion-header>

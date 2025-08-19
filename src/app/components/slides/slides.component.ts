@@ -58,19 +58,19 @@ export class SlidesComponent {
     }
   }
 
+  handelSubInvClick(i: number) {
+    this.subInvClick.emit(i);
+  }
+
+  handleLocatorsClick(i: number) {
+    this.locClick.emit(i);
+  }
+
   handleChangeCOO(event: any) {
     this.changeCOO.emit(event.target.value);
   }
 
-  handleQuantityChange(event: InputCustomEvent<FocusEvent>) {
-    this.changeQuantity.emit(event?.target?.value);
-  }
-
-  handelSubInvClick() {
-    this.subInvClick.emit();
-  }
-
-  handleLocatorsClick() {
-    this.locClick.emit();
+  handleQuantityChange(event: InputCustomEvent<FocusEvent>, i: number) {
+    this.changeQuantity.emit({ value: event?.target?.value, index: i });
   }
 }

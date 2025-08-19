@@ -22,7 +22,7 @@ import { API_TABLE_NAMES } from 'src/app/enums/api-details';
 })
 export class LoginFormComponent {
   loginForm = new FormGroup({
-    username: new FormControl<string | null>('smith', [Validators.required]),
+    username: new FormControl<string | null>('manideep j', [Validators.required]),
     password: new FormControl<string | null>('Propel@123', [
       Validators.required,
     ]),
@@ -31,7 +31,7 @@ export class LoginFormComponent {
   private toastService: ToastService = inject(ToastService);
   private communicationService: CommunicationService =
     inject(CommunicationService);
-  private sqliteService:SqliteService=inject(SqliteService);
+  private sqliteService: SqliteService = inject(SqliteService);
 
   constructor() {
     addIcons({
@@ -53,7 +53,7 @@ export class LoginFormComponent {
     }
   }
 
-  handleDemoClick(){
-    this.sqliteService.getTableRows(API_TABLE_NAMES.LOGIN)
+  handleDemoClick() {
+    this.sqliteService.getTableRows(API_TABLE_NAMES.LOGIN);
   }
 }

@@ -9,20 +9,22 @@
       lines="full"
       *ngFor="let locator of filteredLocatorsList"
       button
-      (click)="handleFilterOptionClick(locator.Locator_PK)"
+      (click)="handleFilterOptionClick(locator.Locator)"
     >
       <ion-row>
         <ion-col size="12">
-          <p>{{ locator.Locator_PK }}</p>
+          <p>{{ locator.Locator }}</p>
         </ion-col>
         <ion-col size="12" class="onHandMaxCapacityCol">
-          <span>OnHand: {{ locator.OnhandQty }} {{ locator.Uom }}</span>
-          <span>Max Capacity: {{ locator.MAXCapacity }}</span>
+          <span>OnHand: {{ locator.OnhandQty }} {{ locator.PrimaryUom }}</span>
+          <span *ngIf="locator.MAXCapacity"
+            >Max Capacity: {{ locator.MAXCapacity }}</span
+          >
         </ion-col>
       </ion-row>
     </ion-item>
   </ng-container>
   <ng-template #noItem>
-    <app-no-items [isDataFetched]="isDataFetched"/>
+    <app-no-items [isDataFetched]="isDataFetched" />
   </ng-template>
 </ion-content>

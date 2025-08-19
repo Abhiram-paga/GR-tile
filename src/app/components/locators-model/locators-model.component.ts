@@ -9,11 +9,11 @@ import { SearchBarComponent } from '../common-components/search-bar/search-bar.c
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { SearchFilterPipe } from 'src/app/pipes/search-filter.pipe';
-import { ILocatorWMSFilter } from 'src/app/models/subinventories.interface';
+import { ILocatorsTable, IOnHandLocators } from 'src/app/models/subinventories.interface';
 import { SqliteService } from 'src/app/services/sqlite.service';
 import { API_TABLE_NAMES } from 'src/app/enums/api-details';
-import { JOINS } from 'src/app/enums/query';
 import { ToastService } from 'src/app/services/toast.service';
+import { JOINS } from 'src/app/enums/query';
 
 @Component({
   selector: 'app-locators-model',
@@ -32,8 +32,8 @@ export class LocatorsModelComponent implements OnInit {
   @Input() selectedItem: IDocs4ReceivingItems | undefined;
   @Input() selectedSubInventory: string = '';
 
-  locatorsList: ILocatorWMSFilter[] = [];
-  filteredLocatorsList: ILocatorWMSFilter[] = [];
+  locatorsList: IOnHandLocators[] = [];
+  filteredLocatorsList: IOnHandLocators[] = [];
   isDataFetched: boolean = false;
 
   subscription: Subscription = new Subscription();
@@ -53,54 +53,75 @@ export class LocatorsModelComponent implements OnInit {
 
   async initializeLocators() {
     try {
-      const subscription1 = this.apiResquestService
-        .request(
-          'GET',
-          `/EBS/22C/getOnHandWMSFilterTableType/${localStorage.getItem(
-            'selectedInvOrgId'
-          )}/${this.selectedSubInventory}/''/${this.selectedItem?.ItemNumber}`
-        )
-        .subscribe({
-          next: async (res) => {
-            let jsonRes = this.commonService.convertCsvToJson(res);
-            let metaData = this.commonService.getMetaDataForJson(jsonRes);
-            await this.sqliteService.createTable(
-              metaData,
-              API_TABLE_NAMES.GET_ON_HAND_WMS_FILTER_TABLE
-            );
-            await this.sqliteService.insertValuesToTable(
-              API_TABLE_NAMES.GET_ON_HAND_WMS_FILTER_TABLE,
-              jsonRes,
-              metaData
-            );
-            await this.sqliteService.getTableRows(
-              API_TABLE_NAMES.GET_ON_HAND_WMS_FILTER_TABLE
-            );
-            await this.sqliteService.getTableRows(API_TABLE_NAMES.GET_LOCATORS);
-            this.locatorsList =
-              await this.sqliteService.getJoinedRowsOfTwoTables(
-                API_TABLE_NAMES.GET_ON_HAND_WMS_FILTER_TABLE,
-                API_TABLE_NAMES.GET_LOCATORS,
-                JOINS.INNER_Join,
-                'Locator_PK',
-                'Locator'
-              );
-            this.filteredLocatorsList = this.locatorsList;
-            this.isDataFetched = true;
-            console.log(this.filteredLocatorsList);
-          },
-          error: (err) => {
-            console.error('Error in OnHandWMSFilter Api:', err);
-            this.toastController.showToast(
-              'Please select subInv',
-              'bug',
-              'danger'
-            );
-          },
-        });
-      this.subscription.add(subscription1);
+      // const subscription1 = this.apiResquestService
+      //   .request(
+      //     'GET',
+      //     `/EBS/22C/getOnHandWMSFilterTableType/${localStorage.getItem(
+      //       'selectedInvOrgId'
+      //     )}/${this.selectedSubInventory}/''/${this.selectedItem?.ItemNumber}`
+      //   )
+      //   .subscribe({
+      //     next: async (res) => {
+      //       let jsonRes = this.commonService.convertCsvToJson(res);
+      //       let metaData = this.commonService.getMetaDataForJson(jsonRes);
+      //       await this.sqliteService.createTable(
+      //         metaData,
+      //         API_TABLE_NAMES.GET_ON_HAND_WMS_FILTER_TABLE
+      //       );
+      //       await this.sqliteService.insertValuesToTable(
+      //         API_TABLE_NAMES.GET_ON_HAND_WMS_FILTER_TABLE,
+      //         jsonRes,
+      //         metaData
+      //       );
+      //       await this.sqliteService.getTableRows(
+      //         API_TABLE_NAMES.GET_ON_HAND_WMS_FILTER_TABLE
+      //       );
+      //       await this.sqliteService.getTableRows(API_TABLE_NAMES.GET_LOCATORS);
+      //       this.locatorsList =
+      //         await this.sqliteService.getJoinedRowsOfTwoTables(
+      //           API_TABLE_NAMES.GET_ON_HAND_WMS_FILTER_TABLE,
+      //           API_TABLE_NAMES.GET_LOCATORS,
+      //           JOINS.INNER_Join,
+      //           'Locator_PK',
+      //           'Locator'
+      //         );
+      //       this.filteredLocatorsList = this.locatorsList;
+      //       this.isDataFetched = true;
+      //       console.log(this.filteredLocatorsList);
+      //     },
+      //     error: (err) => {
+      //       console.error('Error in OnHandWMSFilter Api:', err);
+      //       this.toastController.showToast(
+      //         'Please select subInv',
+      //         'bug',
+      //         'danger'
+      //       );
+      //     },
+      //   });
+      // this.subscription.add(subscription1);
+
+      // this.locatorsList = await this.sqliteService.getTableRowsWithWhereClause(
+      //   API_TABLE_NAMES.GET_LOCATORS,
+      //   'SubInventoryCode',
+      //   this.selectedSubInventory
+      // );
+
+      this.locatorsList =
+        await this.sqliteService.getJoinedRowsOfTwoTablesWithHaving(
+          API_TABLE_NAMES.GET_LOCATORS,
+          API_TABLE_NAMES.GET_ON_HAND_TABLE_TYPE,
+          JOINS.INNER_Join,
+          'LocatorId_PK',
+          'LocatorId_PK',
+          'SubInventoryCode',
+          this.selectedSubInventory
+        );
+        this.isDataFetched=true;
+
+      this.filteredLocatorsList = this.locatorsList;
     } catch (err) {
       console.error(err);
+      this.isDataFetched = true;
     }
   }
 

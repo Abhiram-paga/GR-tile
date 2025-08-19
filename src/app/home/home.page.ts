@@ -10,6 +10,7 @@ import { API_TABLE_NAMES } from '../enums/api-details';
 import { HOME_PAGE } from '../constants/home-page';
 import { HomeCardComponent } from '../components/home-card/home-card.component';
 import { DOC_TYPE } from '../enums/docs-4-receiving';
+import { ResponsibilitiesService } from '../services/responsibilities.service';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,9 @@ export class HomePage {
   organizationsService: OrganisationService = inject(OrganisationService);
   private sqliteService: SqliteService = inject(SqliteService);
   private router: Router = inject(Router);
+  private responsibilitiesService: ResponsibilitiesService = inject(
+    ResponsibilitiesService
+  );
 
   menuOptions: { name: string; iconName: string }[] | undefined;
   openDocs: number = 0;
@@ -55,7 +59,7 @@ export class HomePage {
             DOC_TYPE.RMA_NUMBER
           )
         ).length;
-        console.log(this.openDocs)
+      console.log(this.openDocs);
     } catch (err) {
       console.error(err);
     }
@@ -66,10 +70,39 @@ export class HomePage {
       this.router.navigate(['/home']);
     } else if (name === 'Logout') {
       this.router.navigate(['/login']);
-    } else if (name === 'Refresh On hand Qty') {
-      this.sqliteService.getTableRows(
-        API_TABLE_NAMES.GET_DOCUMENTS_FOR_RECEIVING
-      );
+    } else if (name === 'Logout + Clear Data') {
+      this.handleLogoutClearData();
+    }
+  }
+
+  async handleLogoutClearData() {
+    try {
+      localStorage.clear();
+      let tablesList = [
+        API_TABLE_NAMES.GET_DOCUMENTS_FOR_RECEIVING,
+        API_TABLE_NAMES.GET_GL_PERIODS,
+        API_TABLE_NAMES.GET_INVENTORY_PERIODS,
+        API_TABLE_NAMES.GET_ITEMS,
+        API_TABLE_NAMES.GET_LOCATIONS,
+        API_TABLE_NAMES.GET_LOCATORS,
+        API_TABLE_NAMES.GET_ORGANIZATIONS,
+        API_TABLE_NAMES.GET_SUBINVENTORIES,
+        API_TABLE_NAMES.TRANSACTION_HISTORY,
+        API_TABLE_NAMES.LOGIN,
+      ];
+      Promise.all(
+        tablesList.map((table) => this.sqliteService.dropTable(table))
+      )
+        .then(() => {
+          console.log('All tables dropped successfully');
+        })
+        .catch((error) => {
+          console.error('Failed to drop one or more tables:', error);
+        });
+
+      this.router.navigate(['/login']);
+    } catch (err) {
+      console.error(err);
     }
   }
 }

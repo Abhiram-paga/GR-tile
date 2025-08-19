@@ -37,22 +37,32 @@ export class ModelLoaderService {
 
   async presentAlert(
     header: string,
-    message: string
+    message: string,
+    isLoginPage: boolean = false
   ): Promise<'cancel' | 'confirm'> {
     try {
+      let buttons = [
+        {
+          text: 'CANCEL',
+          role: 'cancel',
+        },
+        {
+          text: 'YES',
+          role: 'confirm',
+        },
+      ];
+      if (isLoginPage) {
+        buttons = [
+          {
+            text: 'OK',
+            role: 'cancel',
+          },
+        ];
+      }
       const alert = await this.alertController.create({
         header: header,
         message: message,
-        buttons: [
-          {
-            text: 'CANCEL',
-            role: 'cancel',
-          },
-          {
-            text: 'YES',
-            role: 'confirm',
-          },
-        ],
+        buttons: buttons
       });
 
       await alert.present();
@@ -61,7 +71,7 @@ export class ModelLoaderService {
       return role as 'cancel' | 'confirm';
     } catch (err) {
       console.error(err);
-      throw new Error('Error in displaying alert')
+      throw new Error('Error in displaying alert');
     }
   }
 }

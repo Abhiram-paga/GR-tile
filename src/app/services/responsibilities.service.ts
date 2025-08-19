@@ -148,6 +148,19 @@ export class ResponsibilitiesService {
       responsibility: API_RESPONSIBILITY.GET_LOCATIONS,
       message: 'Get Locations',
     },
+    {
+      isCsv: true,
+      metadataUrl: '',
+      apiUrl: `/EBS/22A/getOnhandTableType/${localStorage.getItem(
+        'selectedInvOrgId'
+      )}`,
+      type: API_TYPE.TRANSACTIONAL,
+      tableName: API_TABLE_NAMES.GET_ON_HAND_TABLE_TYPE,
+      apiStatus: API_STATUS.INITIAL,
+      responseKey: '',
+      responsibility: API_RESPONSIBILITY.GET_ON_HAND_TABLE_TYPE,
+      message: 'Get onHand',
+    },
   ];
 
   apiStatusSubject = new BehaviorSubject<IApiDetails[]>(this.ALL_API_LIST);
@@ -171,6 +184,7 @@ export class ResponsibilitiesService {
         apisResponsibilities.push(API_RESPONSIBILITY.GET_LOCATORS);
         apisResponsibilities.push(API_RESPONSIBILITY.GET_LOCATIONS);
         apisResponsibilities.push(API_RESPONSIBILITY.GET_INVENTORY_PERIODS);
+        apisResponsibilities.push(API_RESPONSIBILITY.GET_ON_HAND_TABLE_TYPE);
         apisResponsibilities.push(
           API_RESPONSIBILITY.GET_DOCUMENTS_FOR_RECEIVING
         );

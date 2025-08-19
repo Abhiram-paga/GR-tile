@@ -279,13 +279,18 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
       const urlParts = apiDetails.apiUrl.split('/');
       urlParts.pop();
       urlParts.pop();
-      const now = new Date();
-      const day = String(now.getDate()).padStart(2, '0');
-      const month = now.toLocaleString('default', { month: 'short' });
-      const year = now.getFullYear();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const stringiFiedDate = localStorage.getItem('lastRefreshedTime');
+      let now;
+      if (stringiFiedDate) {
+        now = new Date(JSON.parse(stringiFiedDate));
+      }
+
+      const day = String(now?.getDate()).padStart(2, '0');
+      const month = now?.toLocaleString('default', { month: 'short' });
+      const year = now?.getFullYear();
+      const hours = String(now?.getHours()).padStart(2, '0');
+      const minutes = String(now?.getMinutes()).padStart(2, '0');
+      const seconds = String(now?.getSeconds()).padStart(2, '0');
 
       const dateTime = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
       urlParts.push(encodeURIComponent(dateTime));
@@ -303,6 +308,7 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
           'reload',
           'success'
         );
+        localStorage.setItem('lastRefreshedTime', JSON.stringify(new Date()));
       } else {
         this.toastService.showToast(
           'Refreshin Goods Receipt data:Failed',

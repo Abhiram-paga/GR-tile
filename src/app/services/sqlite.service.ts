@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   CapacitorSQLite,
   SQLiteConnection,
@@ -8,6 +8,7 @@ import { IMetadata } from '../models/user.interface';
 import { API_TABLE_NAMES } from '../enums/api-details';
 import { DOC_TYPE } from '../enums/docs-4-receiving';
 import { JOINS } from '../enums/query';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ import { JOINS } from '../enums/query';
 export class SqliteService {
   private sqlite: SQLiteConnection | undefined;
   private db: SQLiteDBConnection | undefined;
+  private datePipe: DatePipe = inject(DatePipe);
 
   constructor() {
     this.sqlite = new SQLiteConnection(CapacitorSQLite);
@@ -74,11 +76,19 @@ export class SqliteService {
       } else {
         createTableQuery = `CREATE TABLE IF NOT EXISTS ${tableName}(${columns})`;
       }
-
       await this.db?.run(createTableQuery);
       console.log(`${tableName} created`);
     } catch (err) {
       console.log('error in creating table:', err);
+    }
+  }
+
+  async dropTable(tableName: API_TABLE_NAMES) {
+    try {
+      await this.db?.run(`DROP TABLE ${tableName}`);
+      console.log(`${tableName} id deleted`);
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -116,6 +126,76 @@ export class SqliteService {
     } catch (err) {
       console.error(err);
       throw Error('Error in getting table rows');
+    }
+  }
+
+  async getTableRowsWithWhereClause(
+    tableName: API_TABLE_NAMES,
+    columnName: string,
+    columnValue: string | number
+  ) {
+    try {
+      const getRowsQuery = `SELECT * FROM ${tableName} WHERE ${columnName}=${columnValue}`;
+      const result = await this.db?.query(getRowsQuery);
+      return result?.values ?? [];
+    } catch (err) {
+      console.error(err);
+      throw new Error(
+        `Error in getting rows with where clause on ${tableName}`
+      );
+    }
+  }
+
+  async updateColumnValueOfRow(
+    tableName: API_TABLE_NAMES,
+    column1Name: string,
+    column2Name: string,
+    column1Value: string,
+    column2Value: string,
+    conditionColumn: string,
+    conditionValue: string,
+    updateSyncTime: boolean = false
+  ) {
+    try {
+      let updateQuery = '';
+      let params: any[] = [];
+
+      if (updateSyncTime) {
+        const formattedDate = this.datePipe.transform(
+          new Date(),
+          'dd-MMM-yyyy HH:mm:ss'
+        );
+        updateQuery = `UPDATE ${tableName} 
+                     SET ${column1Name} = ?, 
+                         ${column2Name} = ?, 
+                         syncedTime = ? 
+                     WHERE ${conditionColumn} = ?`;
+        params = [column1Value, column2Value, formattedDate, conditionValue];
+      } else {
+        updateQuery = `UPDATE ${tableName} 
+                     SET ${column1Name} = ?, 
+                         ${column2Name} = ? 
+                     WHERE ${conditionColumn} = ?`;
+        params = [column1Value, column2Value, conditionValue];
+      }
+
+      await this.db?.run(updateQuery, params);
+      console.log(`Updated ${tableName}`, params);
+    } catch (err) {
+      console.error(`Error in updating ${tableName}:`, err);
+    }
+  }
+
+  async updateRemainingQty(itemNumber: string, qtyValue: number) {
+    try {
+      const updateQuery = `UPDATE ${API_TABLE_NAMES.GET_DOCUMENTS_FOR_RECEIVING} 
+      SET QtyRemaining=${qtyValue}
+       WHERE ItemNumber="${itemNumber}";`;
+      await this.db?.query(updateQuery);
+      console.log(`Updated RemainingQty of ${itemNumber}`);
+    } catch (err) {
+      console.error(err);
+      throw new Error(`Error in updating quantity`);
     }
   }
 
@@ -163,18 +243,22 @@ export class SqliteService {
     }
   }
 
-  async getJoinedRowsOfTwoTables(
+  async getJoinedRowsOfTwoTablesWithHaving(
     table1: API_TABLE_NAMES,
     table2: API_TABLE_NAMES,
     joinName: JOINS,
     table1Column: string,
-    table2Column: string
+    table2Column: string,
+    havingColumn: string,
+    havingValue: string | number
   ) {
     try {
       const query = `SELECT * FROM ${table1} 
       ${joinName} 
       ${table2}
-       ON ${table1}.${table1Column}=${table2}.${table2Column} GROUP BY ${table1Column}`;
+       ON ${table1}.${table1Column}=${table2}.${table2Column}
+        GROUP BY ${table1}.${table1Column} 
+        HAVING ${havingColumn}="${havingValue}"`;
 
       const result = await this.db?.query(query);
       return result?.values ?? [];

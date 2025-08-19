@@ -39,4 +39,12 @@ export enum API_TABLE_NAMES {
   GET_ON_HAND_WMS_FILTER_TABLE = 'onHandWMSFilter',
   LOGIN = 'responsibilities',
   GET_ORGANIZATIONS = 'organizationTable',
+  GET_ON_HAND_TABLE_TYPE = 'onHandTable',
+  TRANSACTION_HISTORY = 'transactions',
+}
+
+export enum TRASACTION_STATUS {
+  IN_LOCAL = 'local',
+  SUCCESS = 'success',
+  FAILED = 'failed',
 }

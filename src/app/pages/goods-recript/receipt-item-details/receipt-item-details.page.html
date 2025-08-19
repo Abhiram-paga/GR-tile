@@ -11,9 +11,9 @@
     [items]="selectedItemsList"
     [qtyValue]="qtyValue"
     [startIndex]="index"
-    (changeQuantity)="handleEnteredQty($event)"
-    (subInvClick)="handleSubInvClick()"
-    (locClick)="handleLocClick()"
+    (changeQuantity)="handleEnteredQty($event.value, $event.index)"
+    (subInvClick)="handleSubInvClick($event)"
+    (locClick)="handleLocClick($event)"
     (slideChange)="handleChangedItem($event)"
     (changeCOO)="handleChangeCOO($event)"
   />

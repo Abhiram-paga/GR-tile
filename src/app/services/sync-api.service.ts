@@ -101,4 +101,5 @@ export class SyncApiService {
     });
     await Promise.all(resyncPromises);
   }
+
 }

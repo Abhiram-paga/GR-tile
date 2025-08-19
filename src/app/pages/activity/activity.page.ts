@@ -11,9 +11,15 @@ import { ActivityCardComponent } from 'src/app/components/activity-card/activity
 import { IApiDetails } from 'src/app/models/api.interface';
 import { Subscription } from 'rxjs';
 import { ButtonComponent } from 'src/app/components/common-components/button/button.component';
-import { API_STATUS, API_TYPE } from 'src/app/enums/api-details';
+import {
+  API_STATUS,
+  API_TABLE_NAMES,
+  API_TYPE,
+} from 'src/app/enums/api-details';
 import { Router } from '@angular/router';
-import { OrganisationService } from 'src/app/services/organisation.service';
+import { SqliteService } from 'src/app/services/sqlite.service';
+import { IMetadata } from 'src/app/models/user.interface';
+import { CREATE_GOODS_RECEIPT_METADATA } from 'src/app/constants/create-goods-receipt';
 
 @Component({
   selector: 'app-activity',
@@ -31,11 +37,10 @@ import { OrganisationService } from 'src/app/services/organisation.service';
 export class ActivityPage implements OnInit {
   modelAlertService: ModelLoaderService = inject(ModelLoaderService);
   private apiSyncService: SyncApiService = inject(SyncApiService);
+  private sqliteService: SqliteService = inject(SqliteService);
   private responsibiltiesService: ResponsibilitiesService = inject(
     ResponsibilitiesService
   );
-  private organizationService: OrganisationService =
-    inject(OrganisationService);
   private router: Router = inject(Router);
 
   subscription: Subscription = new Subscription();
@@ -52,6 +57,12 @@ export class ActivityPage implements OnInit {
 
   ngOnInit() {
     this.apiSyncService.syncApi(false);
+    let metaDataOfCreateGoodsReceipt: IMetadata[] =
+      CREATE_GOODS_RECEIPT_METADATA;
+    this.sqliteService.createTable(
+      metaDataOfCreateGoodsReceipt,
+      API_TABLE_NAMES.TRANSACTION_HISTORY
+    );
     const statusDetailsSubscription =
       this.responsibiltiesService.apiStatus$.subscribe({
         next: (response: IApiDetails[]) => {

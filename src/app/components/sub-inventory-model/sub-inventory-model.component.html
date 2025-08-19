@@ -7,9 +7,9 @@
   <ng-container *ngIf="filteredSubInventories.length > 0; else noItem">
     <ion-item
       lines="full"
-      *ngFor="let inventory of filteredSubInventories"
+      *ngFor="let inventory of filteredSubInventories; let i=index"
       button
-      (click)="handleFilterOptionClick(inventory.SubInventoryCode)"
+      (click)="handleFilterOptionClick(inventory.SubInventoryCode,i)"
     >
       <ion-row>
         <ion-col size="12">

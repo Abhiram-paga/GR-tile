@@ -1,0 +1,29 @@
+<ion-list *ngIf="transactionsList.length !== 0; else noItems">
+  <ion-item lines="full" *ngFor="let transaction of transactionsList">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <p>{{ transaction.transactionTile }}</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="9" class="transactionDetails">
+          <span>Item Number:{{ transaction.ItemNumber }}</span>
+          <span
+            >Sync Time:{{
+              transaction.syncedTime ? transaction.syncedTime : "N/A"
+            }}</span
+          >
+          <span>Quantity:{{ transaction.Quantity }}</span>
+          <span>Transaction Id:{{ transaction.MobileTransactionId }}</span>
+        </ion-col>
+        <ion-col>
+          <p>{{ transaction.transactionStatus }}</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ion-list>
+<ng-template #noItems>
+  <app-no-items />
+</ng-template>

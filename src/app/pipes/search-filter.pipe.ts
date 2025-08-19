@@ -16,7 +16,8 @@ export class SearchFilterPipe implements PipeTransform {
         item?.ItemNumber?.toLowerCase().includes(lowerSearch) ||
         item?.ItemDesc?.toLowerCase().includes(lowerSearch) ||
         String(item?.SubInventoryCode).toLowerCase().includes(lowerSearch) ||
-        item?.Locator_PK?.toLowerCase().includes(lowerSearch)
+        item?.Locator_PK?.toLowerCase().includes(lowerSearch) ||
+        item.transactionTile.toLowerCase().includes(lowerSearch)
       );
     });
   }

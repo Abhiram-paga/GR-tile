@@ -14,6 +14,7 @@ h3 {
 
 .status-card {
   text-align: center;
+  min-height:200px;
 
   .circle-container {
     @include flex-center;
@@ -39,4 +40,9 @@ h3 {
     margin-top: 8px;
     color: #444;
   }
+}
+
+.responsibity_icon{
+  font-size: 40px;
+  color: $main-color;
 }

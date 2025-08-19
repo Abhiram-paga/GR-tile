@@ -56,6 +56,16 @@ export class LoginPage {
     try {
       const subscription1 = this.userService.loginUser(user).subscribe({
         next: async (res: IUserLogin) => {
+          console.log(res);
+          if (res.data[0].STATUS === '0') {
+            this.loaderService.presentAlert(
+              'Login Failed',
+              'Login credentials are Invalid. Enter valid details.',
+              true
+            );
+            this.loaderService.hideLoader();
+            return;
+          }
           await this.userService.handelLoginResponse(res);
 
           const responsibilities: IUserLoginRes[] =
@@ -67,7 +77,14 @@ export class LoginPage {
 
           const defaultOrgId: string =
             filteredResponsibilities[0].DEFAULT_ORG_ID;
+          const personId: string = filteredResponsibilities[0].PERSON_ID;
+          const responsibilityId: string =
+            filteredResponsibilities[0].RESPONSIBILITY_ID;
+          const userId: string = filteredResponsibilities[0].USER_ID;
+          localStorage.setItem('userId', userId);
+          localStorage.setItem('responsibilityId', responsibilityId);
           localStorage.setItem('defaultOrgId', defaultOrgId);
+          localStorage.setItem('employeeId', personId);
 
           this.organizationService.defaultOrgId = defaultOrgId;
           const subscription3 = this.organizationService

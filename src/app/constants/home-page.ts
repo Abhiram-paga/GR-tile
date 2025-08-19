@@ -7,10 +7,6 @@ export const HOME_PAGE = {
       iconName: 'home',
     },
     {
-      name: 'Refresh On hand Qty',
-      iconName: 'refresh',
-    },
-    {
       name: 'Logout',
       iconName: 'log-out',
     },

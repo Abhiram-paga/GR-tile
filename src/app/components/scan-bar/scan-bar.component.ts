@@ -44,8 +44,8 @@ export class ScanBarComponent {
       });
       if (matchedDoc) {
         this.docFound.emit(this.searchInput);
-        this.searchInput = '';
         this.value = '';
+        this.searchInput = '';
       } else {
         this.toastController.showToast(
           `Invalid #${this.searchInput}`,

@@ -5,7 +5,13 @@ import { SqliteService } from './sqlite.service';
 import { OrganisationService } from './organisation.service';
 import { ApiRequestService } from './api-request.service';
 import { IApiDetails } from '../models/api.interface';
-import { API_TABLE_NAMES } from '../enums/api-details';
+import { API_TABLE_NAMES, TRASACTION_STATUS } from '../enums/api-details';
+import {
+  ICreateReceiptResponse,
+  IDataFromTransactionTable,
+} from '../models/create-goods-receipt';
+import { NavController } from '@ionic/angular';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +21,8 @@ export class CommunicationService {
   private organizationService: OrganisationService =
     inject(OrganisationService);
   private apiRequestService: ApiRequestService = inject(ApiRequestService);
+  private navController: NavController = inject(NavController);
+  private toastService: ToastService = inject(ToastService);
 
   private readonly actionSource = new Subject<IUser>();
   private functionSubject = new Subject<() => void>();
@@ -133,6 +141,118 @@ export class CommunicationService {
         tableName
       );
       this.organizationService.organizationsSub.next(organizations);
+    }
+  }
+
+  generateBodyForCreateReceiptApi(
+    dataFromTransactionTable: IDataFromTransactionTable
+  ) {
+    return {
+      Input: {
+        parts: [
+          {
+            id: 'part1',
+            path: '/receivingReceiptRequests',
+            operation: 'create',
+            payload: {
+              ReceiptSourceCode: '',
+              OrganizationCode: '',
+              EmployeeId: dataFromTransactionTable.EmployeeId,
+              BusinessUnitId: dataFromTransactionTable.BusinessUnitId,
+              ReceiptNumber: '',
+              BillOfLading: '',
+              FreightCarrierName: '',
+              PackingSlip: '',
+              WaybillAirbillNumber: '',
+              ShipmentNumber: '',
+              ShippedDate: '',
+              VendorSiteId: '',
+              VendorId: dataFromTransactionTable.VendorId,
+              attachments: [],
+              CustomerId: '',
+              InventoryOrgId: dataFromTransactionTable.InventoryOrgId,
+              DeliveryDate: dataFromTransactionTable.DeliveryDate,
+              ResponsibilityId: dataFromTransactionTable.ResponsibilityId,
+              UserId: dataFromTransactionTable.UserId,
+              DummyReceiptNumber: dataFromTransactionTable.DummyReceiptNumber,
+              BusinessUnit: dataFromTransactionTable.BusinessUnit,
+              InsertAndProcessFlag: 'true',
+              lines: [
+                {
+                  ReceiptSourceCode: '',
+                  MobileTransactionId:
+                    dataFromTransactionTable.MobileTransactionId,
+                  TransactionType: 'RECEIVE',
+                  AutoTransactCode: 'RECEIVE',
+                  OrganizationCode: '',
+                  DocumentNumber: dataFromTransactionTable.DocumentNumber,
+                  DocumentLineNumber:
+                    dataFromTransactionTable.DocumentLineNumber,
+                  ItemNumber: dataFromTransactionTable.ItemNumber,
+                  TransactionDate: dataFromTransactionTable.TransactionDate,
+                  Quantity: dataFromTransactionTable.Quantity,
+                  UnitOfMeasure: 'Ea',
+                  SoldtoLegalEntity: '',
+                  SecondaryUnitOfMeasure: '',
+                  ShipmentHeaderId: '',
+                  ItemRevision: '',
+                  POHeaderId: dataFromTransactionTable.POHeaderId,
+                  POLineLocationId: dataFromTransactionTable.POLineLocationId,
+                  POLineId: dataFromTransactionTable.POLineId,
+                  PODistributionId: dataFromTransactionTable.PODistributionId,
+                  ReasonName: '',
+                  Comments: '',
+                  ShipmentLineId: '',
+                  transactionAttachments: [],
+                  lotItemLots: [],
+                  serialItemSerials: [],
+                  lotSerialItemLots: [],
+                  ExternalSystemTransactionReference: 'Mobile Transaction',
+                  ReceiptAdviceHeaderId: '',
+                  ReceiptAdviceLineId: '',
+                  TransferOrderHeaderId: '',
+                  TransferOrderLineId: '',
+                  PoLineLocationId: dataFromTransactionTable.POLineLocationId,
+                  DestinationTypeCode: 'Receiving',
+                  Subinventory: dataFromTransactionTable.Subinventory,
+                  Locator: dataFromTransactionTable.Locator,
+                  ShipmentNumber: '',
+                  LpnNumber: '',
+                  OrderLineId: '',
+                },
+              ],
+            },
+          },
+        ],
+      },
+    };
+  }
+
+  async handleCreateReceiptsApiResponse(
+    res: ICreateReceiptResponse,
+    createReceiptsBody: any,
+    redirection: boolean = true
+  ) {
+    const recordStatus = res.Response?.[0]?.RecordStatus;
+    console.log(recordStatus);
+    if (recordStatus === 'S') {
+      await this.sqliteService.updateColumnValueOfRow(
+        API_TABLE_NAMES.TRANSACTION_HISTORY,
+        'isSynced',
+        'transactionStatus',
+        'true',
+        TRASACTION_STATUS.SUCCESS,
+        'MobileTransactionId',
+        String(
+          createReceiptsBody.Input.parts[0].payload.lines[0].MobileTransactionId
+        ),
+        true
+      );
+      if (redirection) {
+        this.navController.navigateForward('/home');
+      }
+    } else if (recordStatus === 'E') {
+      this.toastService.showToast(res.Response[0].Message, 'bug', 'danger');
     }
   }
 }

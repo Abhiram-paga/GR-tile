@@ -8,15 +8,22 @@
       >
         <ion-card-header>
           <h3>{{ responsibility.name }}</h3>
-          <span>{{ openDocs }} Open Docs</span>
+          <span *ngIf="responsibility.name === 'Goods Receipt'"
+            >{{ openDocs }} Open Docs</span
+          >
         </ion-card-header>
         <ion-card-content>
           <div class="circle-container">
-            <div class="circle">
-              <span>{{ percent }}%</span>
-            </div>
+            <ion-icon
+              [name]="responsibility.iconName"
+              class="responsibity_icon"
+            />
           </div>
-          <span class="completed-text">{{ completedDocs }} Completed</span>
+          <span
+            class="completed-text"
+            *ngIf="responsibility.name === 'Goods Receipt'"
+            >{{ completedDocs }} Completed</span
+          >
         </ion-card-content>
       </ion-card>
     </ion-col></ion-row

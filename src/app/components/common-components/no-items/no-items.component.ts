@@ -8,10 +8,10 @@ import { alertCircle } from 'ionicons/icons';
   selector: 'app-no-items',
   templateUrl: './no-items.component.html',
   styleUrls: ['./no-items.component.scss'],
-  imports: [IonicModule,CommonModule],
+  imports: [IonicModule, CommonModule],
 })
 export class NoItemsComponent {
-  @Input() isDataFetched:boolean=false;
+  @Input() isDataFetched: boolean = true;
 
   constructor() {
     addIcons({

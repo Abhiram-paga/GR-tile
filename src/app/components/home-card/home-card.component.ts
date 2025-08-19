@@ -1,7 +1,8 @@
 import { Component, inject, Input } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { NavController } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { listOutline, receiptOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-home-card',
@@ -11,23 +12,23 @@ import { NavController } from '@ionic/angular';
 })
 export class HomeCardComponent {
   @Input() responsibilitiesList = [
-    { name: 'Goods Receipt' },
-    { name: 'PO Inspection' },
+    { name: 'Goods Receipt', iconName: 'receipt-outline' },
+    { name: 'Transactions', iconName: 'list-outline' },
   ];
   @Input() openDocs: number = 0;
   completedDocs = 0;
+
+  constructor() {
+    addIcons({ listOutline, receiptOutline });
+  }
 
   private navCtrl: NavController = inject(NavController);
 
   handleClickResponsibility(responsibity: string) {
     if (responsibity === 'Goods Receipt') {
       this.navCtrl.navigateForward('/receipt-purchase-orders-page');
+    } else if (responsibity === 'Transactions') {
+      this.navCtrl.navigateForward('/transactions');
     }
-  }
-
-  get percent(): number {
-    return this.openDocs === 0
-      ? 0
-      : Math.round((this.completedDocs / this.openDocs) * 100);
   }
 }

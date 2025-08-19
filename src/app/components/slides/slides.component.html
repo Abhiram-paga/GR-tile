@@ -52,13 +52,13 @@
                   [docsList]="subInventories"
                   matchField="SubInventoryCode"
                   placeHolderText="Scan SubInv"
-                  [value]="selectedSubInventory"
+                  [value]="item.SubInventoryCode"
               /></ion-col>
               <ion-col>
                 <ion-icon
                   name="chevron-forward"
                   button
-                  (click)="handelSubInvClick()"
+                  (click)="handelSubInvClick(i)"
                 ></ion-icon>
               </ion-col>
             </div>
@@ -73,14 +73,14 @@
               <ion-col size="7"
                 ><app-scan-bar
                   placeHolderText="Scan Locator"
-                  [value]="selectedLocator"
+                  [value]="item.Locator"
               /></ion-col>
               <ion-col>
                 <ion-icon
                   *ngIf="selectedSubInventory"
                   name="chevron-forward"
                   button
-                  (click)="handleLocatorsClick()"
+                  (click)="handleLocatorsClick(i)"
                 ></ion-icon>
               </ion-col>
             </div>
@@ -97,7 +97,7 @@
                   type="number"
                   placeholder="QTY"
                   [value]="qtyValue"
-                  (ionBlur)="handleQuantityChange($event)"
+                  (ionBlur)="handleQuantityChange($event, i)"
                 ></ion-input>
               </ion-col>
               <ion-col size="2">{{ selectedUom }} </ion-col>
