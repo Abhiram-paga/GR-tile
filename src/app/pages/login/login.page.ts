@@ -1,22 +1,22 @@
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
+import { Subscription } from 'rxjs';
 import { LoginFormComponent } from 'src/app/components/login-form/login-form.component';
-import { LOGOS } from 'src/assets/logo';
-import { UserService } from 'src/app/services/user.service';
+import { API_TABLE_NAMES } from 'src/app/enums/api-details';
 import {
-  IUserLogin,
   IUser,
+  IUserLogin,
   IUserLoginRes,
 } from 'src/app/models/user.interface';
-import { Subscription } from 'rxjs';
 import { CommunicationService } from 'src/app/services/communication.service';
 import { ModelLoaderService } from 'src/app/services/model-loader.service';
-import { SqliteService } from 'src/app/services/sqlite.service';
 import { OrganisationService } from 'src/app/services/organisation.service';
-import { Router } from '@angular/router';
-import { API_TABLE_NAMES } from 'src/app/enums/api-details';
+import { SqliteService } from 'src/app/services/sqlite.service';
+import { UserService } from 'src/app/services/user.service';
+import { LOGOS } from 'src/assets/logo';
 
 @Component({
   selector: 'app-login',
@@ -81,28 +81,34 @@ export class LoginPage {
           const responsibilityId: string =
             filteredResponsibilities[0].RESPONSIBILITY_ID;
           const userId: string = filteredResponsibilities[0].USER_ID;
-          localStorage.setItem('userId', userId);
-          localStorage.setItem('responsibilityId', responsibilityId);
-          localStorage.setItem('defaultOrgId', defaultOrgId);
-          localStorage.setItem('employeeId', personId);
+          let isDeltaSync = !!localStorage.getItem('defaultOrgId');
+          if (!isDeltaSync) {
+            localStorage.setItem('userId', userId);
+            localStorage.setItem('responsibilityId', responsibilityId);
+            localStorage.setItem('defaultOrgId', defaultOrgId);
+            localStorage.setItem('employeeId', personId);
 
-          this.organizationService.defaultOrgId = defaultOrgId;
-          const subscription3 = this.organizationService
-            .getInventoryOrganizationsTable(defaultOrgId)
-            .subscribe({
-              next: async (res) => {
-                this.communicationService.manageCsvApiResponse(
-                  res,
-                  API_TABLE_NAMES.GET_ORGANIZATIONS
-                );
-                this.loaderService.hideLoader();
-                this.router.navigate(['/organizations']);
-              },
-              error: (err) => {
-                console.error(err);
-              },
-            });
-          this.subscriptions.add(subscription3);
+            this.organizationService.defaultOrgId = defaultOrgId;
+            const subscription3 = this.organizationService
+              .getInventoryOrganizationsTable(defaultOrgId)
+              .subscribe({
+                next: async (res) => {
+                  this.communicationService.manageCsvApiResponse(
+                    res,
+                    API_TABLE_NAMES.GET_ORGANIZATIONS
+                  );
+                  this.loaderService.hideLoader();
+                  this.router.navigate(['/organizations']);
+                },
+                error: (err) => {
+                  console.error(err);
+                },
+              });
+            this.subscriptions.add(subscription3);
+          } else {
+            this.loaderService.hideLoader();
+            this.router.navigate(['/activity']);
+          }
         },
 
         error: (err) => {

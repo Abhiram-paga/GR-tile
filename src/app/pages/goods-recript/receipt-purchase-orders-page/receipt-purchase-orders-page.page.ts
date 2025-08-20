@@ -275,24 +275,13 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
             'danger'
           );
         }
+        return;
       }
       const urlParts = apiDetails.apiUrl.split('/');
       urlParts.pop();
       urlParts.pop();
-      const stringiFiedDate = localStorage.getItem('lastRefreshedTime');
-      let now;
-      if (stringiFiedDate) {
-        now = new Date(JSON.parse(stringiFiedDate));
-      }
 
-      const day = String(now?.getDate()).padStart(2, '0');
-      const month = now?.toLocaleString('default', { month: 'short' });
-      const year = now?.getFullYear();
-      const hours = String(now?.getHours()).padStart(2, '0');
-      const minutes = String(now?.getMinutes()).padStart(2, '0');
-      const seconds = String(now?.getSeconds()).padStart(2, '0');
-
-      const dateTime = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+      const dateTime = this.commonService.getDateTimeToMakeDeltaSync();
       urlParts.push(encodeURIComponent(dateTime));
       urlParts.push('%22Y%22');
       const newApi = {
@@ -301,14 +290,13 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
         apiUrl: urlParts.join('/'),
       };
       const apiResponse: IApiResponse =
-        await this.commonService.handleApiResponse(newApi);
+        await this.commonService.handleApiResponse(newApi, true);
       if (apiResponse.statusCode === 200) {
         this.toastService.showToast(
           'Refreshing Goods Receipt data:Sucess',
           'reload',
           'success'
         );
-        localStorage.setItem('lastRefreshedTime', JSON.stringify(new Date()));
       } else {
         this.toastService.showToast(
           'Refreshin Goods Receipt data:Failed',
@@ -351,8 +339,11 @@ export class ReceiptPurchaseOrdersPagePage implements OnInit {
       await modal.present();
 
       const { data } = await modal.onDidDismiss();
+      console.log(data);
       if (data) {
         this.selectedSortOption = data;
+      } else if (data === '') {
+        this.selectedSortOption = FILTER_SORT_OPTIONS.LAST_UPDATE_FIRST;
       }
 
       this.applyFilterAndSort();

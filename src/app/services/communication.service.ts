@@ -63,7 +63,10 @@ export class CommunicationService {
     return metaData;
   }
 
-  async handleApiResponse(apiDetails: IApiDetails) {
+  async handleApiResponse(
+    apiDetails: IApiDetails,
+    isDeltaSync: boolean = false
+  ) {
     try {
       let apiResponse: any = await firstValueFrom(
         this.apiRequestService.request('GET', apiDetails.apiUrl, {})
@@ -83,25 +86,23 @@ export class CommunicationService {
         metaData = this.getMetaDataForJson(jsonRes);
       } else {
         jsonRes = apiResponse[apiDetails.responseKey ?? ''];
-        metaData = await firstValueFrom(
-          this.apiRequestService.request(
-            'GET',
-            apiDetails.metadataUrl ?? '',
-            {}
-          )
-        );
+        if (isDeltaSync === false) {
+          metaData = await firstValueFrom(
+            this.apiRequestService.request(
+              'GET',
+              apiDetails.metadataUrl ?? '',
+              {}
+            )
+          );
+          await this.sqliteService.createTable(metaData, apiDetails.tableName);
+        }
       }
 
-      await this.sqliteService.createTable(metaData, apiDetails.tableName);
       await this.sqliteService.deleteAllRows(apiDetails.tableName);
       let chunks = this.divideResponseIntoChunks(jsonRes, 50);
       await Promise.all(
         chunks.map((chunk) =>
-          this.sqliteService.insertValuesToTable(
-            apiDetails.tableName,
-            chunk,
-            metaData
-          )
+          this.sqliteService.insertValuesToTable(apiDetails.tableName, chunk)
         )
       );
       return {
@@ -135,7 +136,7 @@ export class CommunicationService {
 
     await this.sqliteService.createTable(metaData, tableName);
     await this.sqliteService.deleteAllRows(tableName);
-    await this.sqliteService.insertValuesToTable(tableName, jsonRes, metaData);
+    await this.sqliteService.insertValuesToTable(tableName, jsonRes);
     if (tableName === API_TABLE_NAMES.GET_ORGANIZATIONS) {
       const organizations: IOrg[] = await this.sqliteService.getTableRows(
         tableName
@@ -231,7 +232,7 @@ export class CommunicationService {
   async handleCreateReceiptsApiResponse(
     res: ICreateReceiptResponse,
     createReceiptsBody: any,
-    redirection: boolean = true
+    redirect: boolean = false
   ) {
     const recordStatus = res.Response?.[0]?.RecordStatus;
     console.log(recordStatus);
@@ -248,11 +249,39 @@ export class CommunicationService {
         ),
         true
       );
-      if (redirection) {
+      if (redirect) {
         this.navController.navigateForward('/home');
       }
     } else if (recordStatus === 'E') {
       this.toastService.showToast(res.Response[0].Message, 'bug', 'danger');
+      await this.sqliteService.updateColumnValueOfRow(
+        API_TABLE_NAMES.TRANSACTION_HISTORY,
+        'isSynced',
+        'transactionStatus',
+        'true',
+        TRASACTION_STATUS.FAILED,
+        'MobileTransactionId',
+        String(
+          createReceiptsBody.Input.parts[0].payload.lines[0].MobileTransactionId
+        )
+      );
     }
+  }
+
+  getDateTimeToMakeDeltaSync() {
+    const stringiFiedDate = localStorage.getItem('lastRefreshedTime');
+    let now;
+    if (stringiFiedDate) {
+      now = new Date(JSON.parse(stringiFiedDate));
+    }
+
+    const day = String(now?.getDate()).padStart(2, '0');
+    const month = now?.toLocaleString('default', { month: 'short' });
+    const year = now?.getFullYear();
+    const hours = String(now?.getHours()).padStart(2, '0');
+    const minutes = String(now?.getMinutes()).padStart(2, '0');
+    const seconds = String(now?.getSeconds()).padStart(2, '0');
+    const dateTime = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    return dateTime;
   }
 }

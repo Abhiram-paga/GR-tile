@@ -16,6 +16,7 @@
     (locClick)="handleLocClick($event)"
     (slideChange)="handleChangedItem($event)"
     (changeCOO)="handleChangeCOO($event)"
+
   />
-  <app-button class="confirm__button" label="RECEIVE" (buttonClicked)="handleReceiveButtonClick()"/>
+  <app-button [disabled]="isNavigating" class="confirm__button" label="RECEIVE" (buttonClicked)="handleReceiveButtonClick()"/>
 </ion-content>

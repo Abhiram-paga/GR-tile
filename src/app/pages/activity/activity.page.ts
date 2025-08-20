@@ -56,7 +56,14 @@ export class ActivityPage implements OnInit {
   }
 
   ngOnInit() {
-    this.apiSyncService.syncApi(false);
+    const isDeltaSync = !!localStorage.getItem('selectedDoc');
+    console.log(isDeltaSync);
+
+    if (isDeltaSync) {
+      this.apiSyncService.syncApi(true);
+    } else {
+      this.apiSyncService.syncApi(false);
+    }
     let metaDataOfCreateGoodsReceipt: IMetadata[] =
       CREATE_GOODS_RECEIPT_METADATA;
     this.sqliteService.createTable(
@@ -66,7 +73,14 @@ export class ActivityPage implements OnInit {
     const statusDetailsSubscription =
       this.responsibiltiesService.apiStatus$.subscribe({
         next: (response: IApiDetails[]) => {
-          this.apiStatusDetails = response;
+          const isDeltaSync = !!localStorage.getItem('selectedDoc');
+          if (!isDeltaSync) {
+            this.apiStatusDetails = response;
+          } else {
+            this.apiStatusDetails = response.filter(
+              (api) => api.type === API_TYPE.TRANSACTIONAL
+            );
+          }
 
           this.reSync = response.some(
             (api) =>
@@ -74,7 +88,7 @@ export class ActivityPage implements OnInit {
               (api.apiStatus === API_STATUS.NO_CONTENT &&
                 (api.type === API_TYPE.MASTER || api.type === API_TYPE.CONFIG))
           );
-
+          localStorage.setItem('lastRefreshedTime', JSON.stringify(new Date()));
           this.checkAllApisSucess(response);
         },
       });
@@ -93,19 +107,28 @@ export class ActivityPage implements OnInit {
   }
 
   checkAllApisSucess(response: IApiDetails[]) {
-    const successApis: boolean = response
-      .filter(
-        (apiResponse) =>
-          apiResponse.type === API_TYPE.CONFIG ||
-          apiResponse.type === API_TYPE.MASTER
-      )
-      .every((api) => api.apiStatus === API_STATUS.SUCCESS);
+    let successApis: boolean = false;
+    const isDeltaSync = !!localStorage.getItem('selectedDoc');
+    if (isDeltaSync) {
+      successApis = response
+        .filter((apiResponse) => apiResponse.type === API_TYPE.TRANSACTIONAL)
+        .every((api) => api.apiStatus === API_STATUS.SUCCESS);
+    } else {
+      successApis = response
+        .filter(
+          (apiResponse) =>
+            apiResponse.type === API_TYPE.CONFIG ||
+            apiResponse.type === API_TYPE.MASTER
+        )
+        .every((api) => api.apiStatus === API_STATUS.SUCCESS);
+    }
+    console.log(successApis);
     if (successApis) {
       this.router.navigate(['/home']);
     }
   }
 
-  IonViewDidLeave() {
+  ionViewDidLeave() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }

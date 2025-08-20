@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, InputCustomEvent } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { IDocs4ReceivingItems } from 'src/app/models/docs4receiving.interface';
 import { ScanBarComponent } from '../scan-bar/scan-bar.component';
 import { addIcons } from 'ionicons';
@@ -70,7 +70,7 @@ export class SlidesComponent {
     this.changeCOO.emit(event.target.value);
   }
 
-  handleQuantityChange(event: InputCustomEvent<FocusEvent>, i: number) {
+  handleQuantityChange(event: any, i: number) {
     this.changeQuantity.emit({ value: event?.target?.value, index: i });
   }
 }

@@ -1,24 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonContent,
+  IonFooter,
   IonHeader,
   IonTitle,
   IonToolbar,
   RefresherCustomEvent,
-  IonFooter,
 } from '@ionic/angular/standalone';
 import { map, Subscription } from 'rxjs';
-import { RefresherComponent } from 'src/app/components/refresher/refresher.component';
-import { IOrg } from 'src/app/models/user.interface';
-import { OrganisationService } from 'src/app/services/organisation.service';
-import { CommunicationService } from 'src/app/services/communication.service';
-import { OrganizationListComponent } from 'src/app/components/organization-list/organization-list.component';
 import { ButtonComponent } from 'src/app/components/common-components/button/button.component';
 import { SearchBarComponent } from 'src/app/components/common-components/search-bar/search-bar.component';
-import { Router } from '@angular/router';
+import { OrganizationListComponent } from 'src/app/components/organization-list/organization-list.component';
+import { RefresherComponent } from 'src/app/components/refresher/refresher.component';
 import { API_TABLE_NAMES } from 'src/app/enums/api-details';
+import { IOrg } from 'src/app/models/user.interface';
+import { CommunicationService } from 'src/app/services/communication.service';
+import { OrganisationService } from 'src/app/services/organisation.service';
 
 @Component({
   selector: 'app-organizations',

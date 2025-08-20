@@ -40,7 +40,7 @@ export class ResponsibilitiesService {
       metadataUrl: '',
       apiUrl: `/EBS/22A/getSerialTableType/${localStorage.getItem(
         'selectedInvOrgId'
-      )}/%22/473574/476650`,
+      )}/%22%22/473574/476650`,
       type: API_TYPE.TRANSACTIONAL,
       tableName: API_TABLE_NAMES.GET_SERIALS_TABLE_TYPE,
       apiStatus: API_STATUS.INITIAL,
@@ -90,7 +90,7 @@ export class ResponsibilitiesService {
       metadataUrl: '/EBS/20D/getDocumentsForReceiving/metadata',
       apiUrl: `/EBS/20D/getDocumentsForReceiving/${localStorage.getItem(
         'selectedInvOrgId'
-      )}/%22null%22/%22Y%22`,
+      )}/%22%22/%22Y%22`,
       type: API_TYPE.TRANSACTIONAL,
       tableName: API_TABLE_NAMES.GET_DOCUMENTS_FOR_RECEIVING,
       apiStatus: API_STATUS.INITIAL,
@@ -188,6 +188,7 @@ export class ResponsibilitiesService {
         apisResponsibilities.push(
           API_RESPONSIBILITY.GET_DOCUMENTS_FOR_RECEIVING
         );
+        apisResponsibilities.push(API_RESPONSIBILITY.GET_ON_HAND_WMS_FILTER_TABLE)
         apisResponsibilities.push(API_RESPONSIBILITY.GET_LOTS_TABLE_TYPE);
       }
 

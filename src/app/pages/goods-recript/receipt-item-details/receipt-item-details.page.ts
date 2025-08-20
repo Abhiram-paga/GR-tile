@@ -53,13 +53,14 @@ export class ReceiptItemDetailsPage {
   index: number;
   selectedItemsList: IDocs4ReceivingItems[] = [];
   selectedItemType: DOC_TYPE = DOC_TYPE.PO_NUMBER;
-  qtyValue: number | null | string = '';
+  qtyValue: number | null | string = null;
   subInventoryList: ISubInventory[] = [];
   selectedSubInventory: string = '';
   selectedLocator: string = '';
   selectedUom: string = 'Ea';
   currentActiveItem: IDocs4ReceivingItems;
   enteredCOO: string = '';
+  isNavigating: boolean = false;
   subscriptions = new Subscription();
 
   constructor() {
@@ -92,11 +93,16 @@ export class ReceiptItemDetailsPage {
   }
 
   async handleEnteredQty(value: number, index: number) {
-    if (value === 0 || value > +this.selectedItemsList[index].QtyRemaining) {
+    if (
+      value === null ||
+      value > +this.selectedItemsList[index].QtyRemaining ||
+      value === 0
+    ) {
       const tempQty = value;
       if (
-        tempQty + 1 === +this.selectedItemsList[index].QtyRemaining ||
-        tempQty - 1 === +this.selectedItemsList[index].QtyRemaining
+        (tempQty + 1 === +this.selectedItemsList[index].QtyRemaining ||
+          tempQty - 1 === +this.selectedItemsList[index].QtyRemaining) &&
+        tempQty !== 0
       ) {
         this.modelLoader
           .presentAlert(
@@ -113,9 +119,9 @@ export class ReceiptItemDetailsPage {
             }
           });
       } else {
-        this.modelLoader.presentAlert(
+        await this.modelLoader.presentAlert(
           'Invalid quantity',
-          'Entered quantity exceeds remaining quantity.Enter the quantiti below the remaining quantity',
+          'Entered quantity exceeds remaining quantity.Enter the quantity below the remaining quantity',
           true
         );
         this.selectedItemsList[index].qtyValue = null;
@@ -153,10 +159,16 @@ export class ReceiptItemDetailsPage {
         this.toastService.showToast('Enter COO', 'bug', 'danger');
         return;
       }
-      if (this.qtyValue === 0 || this.qtyValue === null) {
+      if (
+        this.qtyValue === 0 ||
+        this.qtyValue === '' ||
+        this.qtyValue === undefined ||
+        this.qtyValue === null
+      ) {
         this.toastService.showToast('Enter Qty', 'bug', 'danger');
         return;
       }
+      this.isNavigating = true;
       console.log(this.currentActiveItem);
       let date = new Date();
       let formattedDate = this.datePipe.transform(date, 'dd-MMM-yyyy HH:mm:ss');
@@ -207,7 +219,6 @@ export class ReceiptItemDetailsPage {
       await this.sqliteService.insertValuesToTable(
         API_TABLE_NAMES.TRANSACTION_HISTORY,
         dataToStoreInTrasactionTable,
-        CREATE_GOODS_RECEIPT_METADATA
       );
 
       const transactions = await this.sqliteService.getTableRows(
@@ -230,13 +241,15 @@ export class ReceiptItemDetailsPage {
               console.log(res);
               this.commonService.handleCreateReceiptsApiResponse(
                 res,
-                createReceiptsBody
+                createReceiptsBody,
+                true
               );
               await this.sqliteService.updateRemainingQty(
                 this.currentActiveItem.ItemNumber,
                 +this.currentActiveItem.QtyRemaining -
                   +this.currentActiveItem.qtyValue!
               );
+              this.isNavigating = false;
             },
             error: (err) => console.error(err),
           });
@@ -262,7 +275,7 @@ export class ReceiptItemDetailsPage {
         );
 
         this.toastService.showToast('Stored in Local', 'success', 'medium');
-        this.navController.navigateForward('/receipt-items');
+        this.navController.navigateForward('/home');
       }
     } catch (err) {
       console.error(err);

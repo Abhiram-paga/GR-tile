@@ -13,7 +13,6 @@ import { TransactionsComponent } from 'src/app/components/transactions/transacti
 import { CommunicationService } from 'src/app/services/communication.service';
 import { ApiRequestService } from 'src/app/services/api-request.service';
 import { Subscription } from 'rxjs';
-import { IDocs4ReceivingItems } from 'src/app/models/docs4receiving.interface';
 import { NetworkService } from 'src/app/services/network.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { SearchBarComponent } from 'src/app/components/common-components/search-bar/search-bar.component';
@@ -88,8 +87,7 @@ export class TransactionsPage implements OnInit {
               console.log(res);
               this.commonService.handleCreateReceiptsApiResponse(
                 res,
-                createReceiptsBody,
-                false
+                createReceiptsBody
               );
             },
             error: (err) => console.error(err),

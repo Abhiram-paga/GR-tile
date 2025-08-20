@@ -23,12 +23,18 @@ export class SyncApiService {
 
   constructor() {}
 
-  async syncApi(isDelta: boolean) {
-    const responses = [
-      ...this.masterApiService.getAllMaterApiResonses(),
-      ...this.configApiService.getConfigApiResponse(),
-      ...this.transactionApiService.getTransactionApiResponse(),
-    ];
+  async syncApi(isDelta: boolean = false) {
+    let responses: Promise<IApiResponse>[] = [];
+
+    if (isDelta) {
+      responses = this.transactionApiService.getTransactionApiResponse(true);
+    } else {
+      responses = [
+        ...this.masterApiService.getAllMaterApiResonses(),
+        ...this.configApiService.getConfigApiResponse(),
+        ...this.transactionApiService.getTransactionApiResponse(false),
+      ];
+    }
 
     const promises = responses.map((apiResponse) => {
       apiResponse
@@ -101,5 +107,4 @@ export class SyncApiService {
     });
     await Promise.all(resyncPromises);
   }
-
 }

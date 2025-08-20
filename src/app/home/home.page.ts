@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { OrganisationService } from '../services/organisation.service';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, MenuController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { home, logOut, refresh } from 'ionicons/icons';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,6 @@ import { API_TABLE_NAMES } from '../enums/api-details';
 import { HOME_PAGE } from '../constants/home-page';
 import { HomeCardComponent } from '../components/home-card/home-card.component';
 import { DOC_TYPE } from '../enums/docs-4-receiving';
-import { ResponsibilitiesService } from '../services/responsibilities.service';
 
 @Component({
   selector: 'app-home',
@@ -22,9 +21,7 @@ export class HomePage {
   organizationsService: OrganisationService = inject(OrganisationService);
   private sqliteService: SqliteService = inject(SqliteService);
   private router: Router = inject(Router);
-  private responsibilitiesService: ResponsibilitiesService = inject(
-    ResponsibilitiesService
-  );
+  private menuCtrl: MenuController = inject(MenuController);
 
   menuOptions: { name: string; iconName: string }[] | undefined;
   openDocs: number = 0;
@@ -65,7 +62,8 @@ export class HomePage {
     }
   }
 
-  handleMenuOptionClick(name: string) {
+  async handleMenuOptionClick(name: string) {
+    await this.menuCtrl.close();
     if (name === 'Home') {
       this.router.navigate(['/home']);
     } else if (name === 'Logout') {

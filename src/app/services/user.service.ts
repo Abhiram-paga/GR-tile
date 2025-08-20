@@ -36,7 +36,6 @@ export class UserService {
           this.sqliteService.insertValuesToTable(
             'responsibilities',
             chunk,
-            res.metadata
           )
         )
       );

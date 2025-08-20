@@ -202,11 +202,10 @@ export class SqliteService {
   async insertValuesToTable(
     tableName: string,
     data: any[],
-    metadata: IMetadata[]
   ) {
     try {
-      const columns = metadata.map((col) => col.name);
-      const placeHolders = metadata.map((col) => '?').join(',');
+      const columns = Object.keys(data[0]);
+      const placeHolders = columns.map(() => '?').join(',');
       const insertRowsQuery = `INSERT OR IGNORE INTO ${tableName} (${columns.join(
         ','
       )}) VALUES(${placeHolders})`;

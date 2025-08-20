@@ -14,7 +14,7 @@ export interface IApiDetails {
 
 export interface IApiResponse {
   responsibility: API_RESPONSIBILITY;
-  apiType: API_TYPE;
+  apiType: API_TYPE | typeof API_TYPE;
   statusCode: number;
-  message: string ;
+  message: string;
 }

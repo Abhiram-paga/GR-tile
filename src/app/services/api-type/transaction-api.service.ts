@@ -21,12 +21,23 @@ export class TransactionApiService {
     );
   }
 
-  getTransactionApiResponse() {
+  getTransactionApiResponse(isDelta: boolean = false) {
+    const dateTime = this.commonService.getDateTimeToMakeDeltaSync();
     return this.transactionsApi.map(async (api: IApiDetails) => {
+      const apiCopy = { ...api };
+
+      if (isDelta) {
+        if (apiCopy.apiUrl.includes('%22%22')) {
+          apiCopy.apiUrl = apiCopy.apiUrl.replace(
+            '%22%22',
+            encodeURIComponent(dateTime)
+          );
+        }
+      }
       const apisResponsibilities =
         await this.responsibilitiesService.getResponsibilities();
       if (apisResponsibilities.includes(api.responsibility)) {
-        return this.commonService.handleApiResponse(api);
+        return this.commonService.handleApiResponse(apiCopy, isDelta);
       } else {
         return {
           responsibility: api.responsibility,
